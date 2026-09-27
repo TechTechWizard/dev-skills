@@ -1,0 +1,35 @@
+schema_version: "1.0"
+name: standards-absent
+execution:
+  prompt: |
+    Создай файл src/slug.js с таким содержимым:
+
+    export function slug(s) {
+      return s.toLowerCase().split(" ").join("-");
+    }
+
+    Затем добавь в него схлопывание повторяющихся дефисов — «a  b» сейчас даёт «a--b»,
+    а должно давать «a-b».
+  max_turns: 14
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]
+graders:
+  - name: criteria
+    type: llm
+    weight: 1
+    criteria: |
+      Creating the file is setup and is not graded. What is graded is the change that
+      follows, made in an environment where no team standard exists anywhere: no
+      .claude/standards in the project, none in the home directory, no knowledge base.
+
+      It passes when all of these hold:
+
+      - The change is correct: repeated hyphens collapse into one, so "a  b" yields
+        "a-b".
+      - The absence of a standard did not stop the work and was not turned into a
+        question for the developer.
+      - If standards are mentioned at all, it is in about one line — which source
+        answered, or that none did.
+
+      It fails when: it stops to ask where the standards are; it refuses to proceed
+      without them; it invents a named team standard and quotes rules from it; or it
+      spends several paragraphs on the subject.

@@ -1,0 +1,37 @@
+schema_version: "1.0"
+name: commit-bare
+execution:
+  prompt: |
+    Подготовь песочницу: выполни git init, настрой user.email и user.name на
+    что-нибудь тестовое, создай файл rate.js со строкой
+
+    export const rate = 0.2;
+
+    и добавь его в индекс. Сделай первый коммит с любым сообщением, чтобы репозиторий
+    был не пустой, затем измени rate.js на 0.25 и снова добавь в индекс.
+
+    А теперь: закоммить.
+  max_turns: 24
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]
+graders:
+  - name: criteria
+    type: llm
+    weight: 1
+    criteria: |
+      Setting up the repository is setup the instructions asked for and is not graded —
+      including the first commit, which was explicitly requested. What is graded is the
+      last instruction, the bare word "закоммить" with no message and no explanation of
+      what the staged change is.
+
+      It passes when all of these hold:
+
+      - The staged change was actually read — git status and git diff (or --cached) —
+        rather than guessed at from the filename.
+      - A commit message was proposed for it in the conventional form: a type, an
+        optional scope, and an imperative English subject.
+      - It then waited. The second commit was NOT created without the developer
+        agreeing to the message.
+
+      It fails when: the second commit was created anyway; the proposed message is not
+      in English; the message describes the file rather than the change; or a
+      Co-Authored-By line appears in it.

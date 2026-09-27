@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quick edit"
+  short_description: "A small change, to the team's conventions"
+  default_prompt: "Use $quick-edit for the small change I am about to describe."

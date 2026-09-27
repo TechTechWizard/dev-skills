@@ -1,0 +1,5 @@
+.DS_Store
+__pycache__/
+
+# Eval output: transcripts of real runs, with real paths in them.
+evals/results/

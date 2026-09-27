@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review merge request"
+  short_description: "Review somebody else's merge request"
+  default_prompt: "Use $review-mr to review the merge request I name against our checklist."

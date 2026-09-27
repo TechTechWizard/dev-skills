@@ -1,0 +1,32 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install the checker
+        run: uv tool install git+https://github.com/TechTechWizard/claude-setup-kit
+
+      - name: Validate every skill against the Agent Skills specification
+        run: for s in */SKILL.md; do npx -y skills-ref validate "$(dirname "$s")"; done
+
+      - name: Check
+        run: claude-setup check . --no-colour
+
+      - name: Shared references have not drifted
+        run: ./scripts/sync-shared.sh --check

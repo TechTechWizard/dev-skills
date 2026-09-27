@@ -1,0 +1,9 @@
+{
+  "name": "skills",
+  "description": "Development-time manifest only: it lets `claude plugin eval .` load the skills, which live flat at the repository root. Installation goes through `npx skills`, which ignores this file.",
+  "version": "0.1.0",
+  "author": {
+    "name": "TechTechWizard"
+  },
+  "skills": "."
+}

@@ -1,0 +1,7 @@
+# What is particular about this repository, for the repository checker.
+#
+# A set of Agent Skills: skills only — no tools, hooks, agents or settings of its own,
+# and no plugin or marketplace manifest, because these are installed with `npx skills`
+# rather than through a Claude Code marketplace. Nothing here is exempt from anything.
+# This is the repository others install from, so the sanitisation checks are the
+# point — a client name or a task identifier reaching it reaches everyone who installed.

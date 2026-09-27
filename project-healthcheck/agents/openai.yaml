@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project healthcheck"
+  short_description: "Read-only diagnostic pass over a project's stands"
+  default_prompt: "Use $project-healthcheck to run a read-only diagnostic pass over this project's stands."

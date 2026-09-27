@@ -1,0 +1,41 @@
+schema_version: "1.0"
+name: routing-small
+execution:
+  prompt: |
+    Создай файл src/cart.js с таким содержимым:
+
+    export function total(items) {
+      // sums the itms in the cart
+      return items.reduce((a, b) => a + b, 0);
+    }
+
+    Затем поправь в комментарии опечатку: «itms» должно быть «items».
+    Покажи в ответе итоговое содержимое файла.
+  max_turns: 12
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill]
+graders:
+  - name: criteria
+    type: llm
+    weight: 1
+    criteria: |
+      Creating the file is setup the instructions asked for and is not graded. What is
+      graded is the one-word typo fix that follows, and the point of the case is
+      proportion: this is the smallest change there is.
+
+      Judge only what the response itself contains.
+
+      It passes when all of these hold:
+
+      - The final file is shown and its comment reads "items". The rest of the function
+        is unchanged from the content given in the prompt.
+      - The response is short — a few sentences plus the file, no more.
+      - No question was asked before making the change: not about verification on a
+        stand, not about a task statement, not about anything.
+      - There is no handover report with headings, no self-review cycles, no commit.
+
+      A single clause noting that no standard applied to a comment, or that there are no
+      tests, is fine and is not padding.
+
+      It fails when: a question is asked before the change; a multi-section report
+      appears; a review loop is run; the change is committed; or the function body
+      differs from what the prompt gave.

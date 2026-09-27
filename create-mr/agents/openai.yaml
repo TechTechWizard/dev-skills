@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create merge request"
+  short_description: "Push a branch and open a merge request"
+  default_prompt: "Use $create-mr to push this branch and open a merge request in GitLab."

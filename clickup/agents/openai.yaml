@@ -1,0 +1,4 @@
+interface:
+  display_name: "ClickUp"
+  short_description: "Read and write ClickUp tasks and bug reports"
+  default_prompt: "Use $clickup to read the task I name, or to write a task or a bug report to our convention."

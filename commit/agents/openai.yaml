@@ -1,0 +1,4 @@
+interface:
+  display_name: "Commit"
+  short_description: "One commit by the team convention"
+  default_prompt: "Use $commit to commit what is in the working tree, by our convention."
