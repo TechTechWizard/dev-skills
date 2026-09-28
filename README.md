@@ -13,7 +13,7 @@ npx skills add TechTechWizard/skills -g -a claude-code -s '*'
 
 `-g` installs for the user rather than for one project; `-a` names the agent (omit it to
 be asked, `'*'` for every agent on the machine); `-s '*'` takes all six, or name the ones
-you want. The repository is public, so installation needs no credentials.
+you want.
 
 Update later with `npx skills update`, remove with `npx skills remove`.
 
