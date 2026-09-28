@@ -1,9 +1,9 @@
 # skills
 
-Agent Skills for working the way we actually work: tasks in ClickUp, merge requests in
-GitLab, and a development step that ends at something you can look at. Six skills in the
-[Agent Skills](https://agentskills.io) format, installed with `npx skills`, usable from
-Claude Code, Cursor and every other agent the installer supports.
+Six Agent Skills for ClickUp tasks, GitLab merge requests and code changes: small edits,
+task implementation with self-review, commits, merge-request creation and review. The
+skills use the [Agent Skills](https://agentskills.io) format, install with `npx skills`,
+and work in Claude Code, Cursor and the other agents the installer supports.
 
 ## Install
 
@@ -13,50 +13,47 @@ npx skills add TechTechWizard/skills -g -a claude-code -s '*'
 
 `-g` installs for the user rather than for one project; `-a` names the agent (omit it to
 be asked, `'*'` for every agent on the machine); `-s '*'` takes all six, or name the ones
-you want. Nothing else is needed: the repository is public, so the clone goes over HTTPS
-and asks for no credential and no access.
+you want. The repository is public, so installation needs no credentials.
 
 Update later with `npx skills update`, remove with `npx skills remove`.
 
-## What is here
+## Skills
 
-| Skill | You say | What happens |
+| Skill | Trigger phrases | What it does |
 |---|---|---|
-| `clickup` | «прочитай задачу», a task id or link, «заведи таску», «багрепорт» | The card, comments and linked tasks read into a statement in your own words; or a task or bug report written to your team's convention and read back to verify. Needs the `clickup` CLI, which the skill offers to install on first use. |
-| `quick-edit` | «поправь», «почини», «переименуй» | A small change you are watching, to the team's conventions, and back only what the diff does not say. |
-| `implement-task` | «реализуй задачу», «запускай в работу» | A prepared task run on its own: standards, code, two rounds of self-review, verification, commits, handover report. |
-| `commit` | «закоммить» | One commit by the convention. With no details given, it proposes a message and waits. |
-| `review-mr` | «сделай ревью», a merge-request link | Somebody else's merge request read against the checklist, with the findings posted as comments. Never edits the code. |
-| `create-mr` | «создай MR», «на ревью» | A committed branch pushed and turned into a merge request. |
+| `clickup` | «прочитай задачу», a task id or link, «заведи таску», «багрепорт» | Reads a task card, its comments and linked tasks and restates the task; or writes a task or bug report to the configured convention and reads it back to verify. Needs the `clickup` CLI, which the skill offers to install on first use. |
+| `quick-edit` | «поправь», «почини», «переименуй» | Makes a small change while the developer watches, following the configured standards, and reports only what the diff does not show. |
+| `implement-task` | «реализуй задачу», «запускай в работу» | Runs a prepared task on its own: standards, code, two rounds of self-review, verification, commits, handover report. |
+| `commit` | «закоммить» | Makes one commit by the convention. With no details given, it proposes a message and waits. |
+| `review-mr` | «сделай ревью», a merge-request link | Reviews another developer's merge request against the checklist and posts the findings as comments. Never edits the code. |
+| `create-mr` | «создай MR», «на ревью» | Pushes a committed branch and opens a merge request for it. |
 
-The line that matters is between `quick-edit` and `implement-task`. The first is for a
-change you are looking at right now; the second is for work someone else will review, and
-it costs accordingly — an intake, two review cycles, a report. Asking the heavy one for a
-typo is how people conclude that skills are in the way.
+`quick-edit` and `implement-task` cover different sizes of work. `quick-edit` is for a
+change the developer is looking at right now. `implement-task` is for work that will go
+to review: it adds an intake step, two review cycles and a report, so it is slower and is
+not meant for small fixes.
 
-`review-mr` is called that, and not `code-review`, because Claude Code ships a built-in
-skill named `code-review` and a personal skill with the same name hides it from the list —
-and both `review-mr` and `implement-task` call the built-in one to hunt bugs.
+The review skill is named `review-mr` rather than `code-review` because Claude Code has a
+built-in skill named `code-review`, and a personal skill with the same name hides it.
+Both `review-mr` and `implement-task` call the built-in skill to look for bugs.
 
-## Your team's rules do not travel in here
+## Standards
 
-None of these skills ships anybody's standards. `quick-edit`, `implement-task`, `commit`
-and `review-mr` look the team's code standards up; `clickup` looks the task and bug
-conventions up. Both look in the same place, and that place is a folder:
+The skills do not include coding standards or task conventions. `quick-edit`,
+`implement-task`, `commit` and `review-mr` read code standards, and `clickup` reads task
+and bug conventions, from the same folder, in this order:
 
-1. `<project>/.claude/standards/` — committed into the project, so everyone working on it
-   gets the same answer, including someone with nothing set up.
-2. `~/.claude/standards/` — yours.
+1. `<project>/.claude/standards/` — committed to the project and shared by everyone who
+   works on it.
+2. `~/.claude/standards/` — personal standards.
 
-Then a company knowledge base over MCP if one is configured, then a thin
-general-practice fallback that ships with the skill.
+After that comes a knowledge base over MCP, if one is configured, and then the general
+guidance each skill ships with.
 
-**Put in the folder whatever you want the skills to read.** The documents themselves,
-symbolic links to documents, or symbolic links to whole directories of documents in a
-checkout you already have — all three work, and nothing inside these skills declares what
-ought to be there. A session lists the folder and opens what matches the work in front of
-it, so a direction your company documented yesterday starts answering the moment somebody
-drops a link in, with no change to any skill and no update to install.
+The folder can hold documents, symbolic links to documents, or symbolic links to whole
+directories of documents. The skills do not expect particular file names: a session lists
+the folder and opens the entries that match the current work. A new entry takes effect
+immediately, without changing or updating the skills.
 
 ```sh
 mkdir -p ~/.claude/standards
@@ -67,35 +64,33 @@ ln -s ~/Work/<your-frontend-docs>/docs         ~/.claude/standards/frontend
 ln -s ~/Work/<your-docs>/task-convention.md    ~/.claude/standards/task.md
 ```
 
-Name each entry after the stack or the activity it covers, because that name is all a
-session has to go on when it decides what this change needs. Beyond that there is no
-convention to learn.
+Name each entry after the stack or the activity it covers, because the session chooses
+entries by name.
 
-A missing standard never stops the work: the skill says which file answered, once, and
-carries on.
+When no standard is found, the skill uses its built-in guidance, says which source it
+used, and continues.
 
-## What the skills expect
+## Requirements
 
-Claude Code or another supported agent, and nothing else mandatory. Each skill degrades
-rather than refuses:
+Only a supported agent is required. Some skills use additional tools:
 
 - `clickup` needs the `clickup` CLI from
   [claude-work-tools](https://github.com/TechTechWizard/claude-work-tools) and a personal
-  ClickUp API token; the skill explains and installs the CLI once you agree, the token only
-  you can create.
-- `create-mr` and `review-mr` need `glab`, authenticated against your GitLab.
+  ClickUp API token. The skill offers to install the CLI; the token has to be created in
+  ClickUp by the user.
+- `create-mr` and `review-mr` need `glab`, authenticated against the GitLab instance.
 - `implement-task` uses the built-in `code-review`, `security-review`, `simplify` and `run`
-  skills when they are there, and says in the handover which reviewers actually ran.
+  skills when they are available, and states in the handover which reviewers ran.
 
-### On OpenCode
+### OpenCode
 
 OpenCode reads `~/.agents/skills/`, where `npx skills` puts the canonical copies, so the
-skills themselves need no setup. The standards slot does: OpenCode gates every read
+skills themselves need no setup. The standards folder does: OpenCode gates every read
 outside the project directory behind `permission.external_directory`, whose default is
-`ask`. The skill directories are allowed automatically, `~/.claude/standards/` is not, and
-in a headless run there is nobody to answer — the host replies "The user rejected
-permission", and the session ends with exit code 0 and no final text, which looks like a
-run that simply said nothing. One entry in `~/.config/opencode/opencode.json` fixes it:
+`ask`. The skill directories are allowed automatically, `~/.claude/standards/` is not. In
+a headless run nobody can answer the prompt, so the host replies "The user rejected
+permission" and the session ends with exit code 0 and no final text. One entry in
+`~/.config/opencode/opencode.json` fixes it:
 
 ```json
 {
@@ -110,28 +105,24 @@ run that simply said nothing. One entry in `~/.config/opencode/opencode.json` fi
 }
 ```
 
-The second line stands for the directories your slot links point at. It is needed because
-some models (gemini-3.1-pro in some runs) read the link's target path rather than the link,
-and the target is outside the slot. Each path is written twice, with `~` and absolute,
-because the models do not spell it the same way: gpt-5 in some runs asked for
-`/Users/<name>/.claude/standards/` literally rather than through `~`. On an ordinary setup
-the two lines match the same directory; they part when OpenCode runs with a `HOME` other
-than your account's (a wrapper, a sandbox), and then the absolute line is the one that lets
-the read through. With these allowed, the skills behave in OpenCode as they do in Claude
-Code.
+The second pair of lines covers the directories the symbolic links in the standards folder
+point to. Some models (gemini-3.1-pro in some runs) read the link's target path rather
+than the link, and the target is outside the folder. Each path is written twice, with `~`
+and absolute, because models spell it differently: gpt-5 in some runs requested
+`/Users/<name>/.claude/standards/` literally. On an ordinary setup both lines match the
+same directory; they differ when OpenCode runs with a `HOME` other than the account's (a
+wrapper, a sandbox), and then the absolute line is the one that allows the read.
 
-The slot entries are symbolic links, and OpenCode's `glob` does not follow them: it answers
-"No files found" for a full slot. The skills therefore list the slot with `ls -L` or
-`find -L`, or open the folder with the read tool, and never take an empty glob as an empty
-slot.
+OpenCode's `glob` does not follow symbolic links and answers "No files found" for a full
+standards folder. The skills therefore list the folder with `ls -L` or `find -L`, or open
+it with the read tool, and never treat an empty glob as an empty folder.
 
-One more thing, which you will only see in the log: OpenCode reads both
-`~/.claude/skills/` and `~/.agents/skills/`, so when the same set is installed in both it
-writes a `duplicate skill name` warning per skill into its log (visible with
-`--print-logs`), not into the session's output. That is expected and harmless; the model
-takes the copy from `~/.agents/skills/`.
+OpenCode reads both `~/.claude/skills/` and `~/.agents/skills/`. When the same set is
+installed in both, it writes a `duplicate skill name` warning per skill into its log
+(visible with `--print-logs`), not into the session output. The warning is harmless; the
+model uses the copy from `~/.agents/skills/`.
 
-## How this repository is laid out
+## Repository layout
 
 ```
 <name>/                 one directory per skill, flat at the root: SKILL.md, protocols/, references/
@@ -141,27 +132,26 @@ scripts/sync-shared.sh  copies shared/ into every skill that carries the file; -
 evals/                  eval cases, run with `claude plugin eval .`
 ```
 
-Each skill declares what it needs to run in its `compatibility:` field — the CLI it wraps,
-the authentication it expects, whether it leans on a built-in skill of the host. Read it
-before installing one skill rather than the set.
+Each skill declares what it needs to run in its `compatibility:` field: the CLI it wraps,
+the authentication it expects, and whether it relies on a built-in skill of the host.
+Check it before installing a single skill rather than the whole set.
 
-Skills sit flat at the root, the layout most Agent Skills repositories use, so this set
-installs with the same command as the others and looks the same to whoever opens it.
+Skills sit flat at the root, which is the common layout for Agent Skills repositories.
 
 The Agent Skills format makes every skill self-contained — an installer copies the skill's
 directory and nothing else — so four references (`standards.md`, `review-checklist.md`,
 `commit-convention.md`, `verify-template.md`) exist once per skill that needs them. Edit
-the copy in `shared/`, run `scripts/sync-shared.sh`, and the check refuses a commit where
-the copies have drifted.
+the copy in `shared/` and run `scripts/sync-shared.sh`; the check rejects a commit where
+the copies differ.
 
 **Do not edit an installed skill in place.** `npx skills update` overwrites it without
-asking. Disagree by writing your own skill under another name, or by putting a project
-standard into the slot above.
+asking. To change behaviour, create a separate skill under another name, or add a project
+standard to the standards folder.
 
-## Reporting something
+## Issues and contributions
 
-Open an issue, or send a pull request. There is one maintainer and no promise about how
-fast a change lands, which is worth knowing before you wait on one.
+Open an issue or send a pull request. The project has one maintainer and no guaranteed
+response time.
 
 ## Licence
 
