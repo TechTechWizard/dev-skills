@@ -3,7 +3,7 @@ name: commit
 description: "Commit what is in the working tree, by the team convention: type and scope, imperative English subject, the task reference, one logical change per commit. Trigger on «закоммить», «закоммить изменения», «сохрани изменения», «сделай коммит», commit, git commit — including the bare word with no details, where it proposes a message and waits for a yes. Does not push and does not create a merge request: that is create-mr."
 compatibility: "Needs git. Written for Claude Code; the standards lookup reads ~/.claude/standards/."
 metadata:
-  source: "https://github.com/TechTechWizard/skills"
+  source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
   standard: "https://agentskills.io/specification"
 allowed-tools: Read Grep Glob Bash

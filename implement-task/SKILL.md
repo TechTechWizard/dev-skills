@@ -3,7 +3,7 @@ name: implement-task
 description: "Take a prepared task and run it to 'ready for human review' on your own: code, self-review loop, self-fixes, verification, commits by the team convention, and an honest handover report. Use when the developer hands over a task whose analysis and grilling are already done — trigger on «реализуй задачу», «запускай в работу», «пили», «делай задачу», «бери таску», implement the task, run this task, even when the skill is never named and even right after a grill session ends. NOT for a small change the developer is watching — that is quick-edit. Does not analyse or grill the task, does not estimate it, and does not create the merge request."
 compatibility: "Needs git. Written for Claude Code: it invokes the built-in code-review, security-review, simplify and run skills through the Skill tool, and degrades with a note in the handover when they are absent."
 metadata:
-  source: "https://github.com/TechTechWizard/skills"
+  source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
   standard: "https://agentskills.io/specification"
 ---

@@ -3,7 +3,7 @@ name: create-mr
 description: "Turn a committed branch into a merge request in GitLab through the glab CLI: push it, write the title and description from the commits, and give back the link. Trigger on «создай MR», «оформи мерж реквест», «запушь и создай MR», «на ревью», create MR, merge request, open a PR. Expects the work to be committed already — committing is the commit skill, and reviewing somebody else's MR is review-mr."
 compatibility: "Needs git and `glab` authenticated against your GitLab instance."
 metadata:
-  source: "https://github.com/TechTechWizard/skills"
+  source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
   standard: "https://agentskills.io/specification"
 allowed-tools: Read Grep Glob Bash

@@ -1,4 +1,4 @@
-# skills
+# dev-skills
 
 Six Agent Skills for ClickUp tasks, GitLab merge requests and code changes: small edits,
 task implementation with self-review, commits, merge-request creation and review. The
@@ -8,7 +8,7 @@ and work in Claude Code, Cursor and the other agents the installer supports.
 ## Install
 
 ```sh
-npx skills add TechTechWizard/skills -g -a claude-code -s '*'
+npx skills add TechTechWizard/dev-skills -g -a claude-code -s '*'
 ```
 
 `-g` installs for the user rather than for one project; `-a` names the agent (omit it to
