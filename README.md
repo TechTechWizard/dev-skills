@@ -1,10 +1,9 @@
 # skills
 
 Agent Skills for working the way we actually work: tasks in ClickUp, merge requests in
-GitLab, a development step that ends at something you can look at, and a diagnostic pass
-over a project's stands. Seven skills in the [Agent Skills](https://agentskills.io) format,
-installed with `npx skills`, usable from Claude Code, Cursor and every other agent the
-installer supports.
+GitLab, and a development step that ends at something you can look at. Six skills in the
+[Agent Skills](https://agentskills.io) format, installed with `npx skills`, usable from
+Claude Code, Cursor and every other agent the installer supports.
 
 ## Install
 
@@ -13,7 +12,7 @@ npx skills add TechTechWizard/skills -g -a claude-code -s '*'
 ```
 
 `-g` installs for the user rather than for one project; `-a` names the agent (omit it to
-be asked, `'*'` for every agent on the machine); `-s '*'` takes all seven, or name the ones
+be asked, `'*'` for every agent on the machine); `-s '*'` takes all six, or name the ones
 you want. Nothing else is needed: the repository is public, so the clone goes over HTTPS
 and asks for no credential and no access.
 
@@ -29,7 +28,6 @@ Update later with `npx skills update`, remove with `npx skills remove`.
 | `commit` | «закоммить» | One commit by the convention. With no details given, it proposes a message and waits. |
 | `review-mr` | «сделай ревью», a merge-request link | Somebody else's merge request read against the checklist, with the findings posted as comments. Never edits the code. |
 | `create-mr` | «создай MR», «на ревью» | A committed branch pushed and turned into a merge request. |
-| `project-healthcheck` | «хелсчек», «проверь стенд» | A read-only diagnostic pass over a project's stands, driven by `<project>/.claude/healthcheck.md`. |
 
 The line that matters is between `quick-edit` and `implement-task`. The first is for a
 change you are looking at right now; the second is for work someone else will review, and
@@ -88,7 +86,6 @@ rather than refuses:
 - `create-mr` and `review-mr` need `glab`, authenticated against your GitLab.
 - `implement-task` uses the built-in `code-review`, `security-review`, `simplify` and `run`
   skills when they are there, and says in the handover which reviewers actually ran.
-- `project-healthcheck` needs a `healthcheck.md` the project writes about itself.
 
 ### On OpenCode
 

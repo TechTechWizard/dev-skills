@@ -314,8 +314,7 @@ own line, as the final thing in the message:
 
 It exists because an unattended run is read by something before it is read by someone,
 and prose cannot be told apart at a glance: a finished run, a run waiting on an answer
-and a run that died all end in a wall of text. The same line form closes a
-`project-healthcheck` report, so a watcher learns one convention rather than two.
+and a run that died all end in a wall of text.
 
 The report language follows the developer's language. The status
 line stays in this exact form in every language, because it is read by machines.
