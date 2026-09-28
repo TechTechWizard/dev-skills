@@ -1,6 +1,6 @@
 ---
 name: clickup
-description: "Reads and writes ClickUp tasks through the clickup CLI: prepares a task for grilling (card, comments, linked tasks, statement in the developer's own words, list of unknowns), creates tasks and bug reports to the team's own convention, puts estimates and comments on tasks. Use whenever the user gives a ClickUp task id or app.clickup.com/t/ URL, or says «прочитай задачу», «что в таске», «подготовь к грилю», «заведи таску», «багрепорт», «поставь оценку», «напиши коммент в таску» — even when ClickUp is never named and even when the request looks like a one-liner."
+description: "Reads and writes ClickUp tasks through the clickup CLI: prepares a task for grilling (card, comments, linked tasks, statement in the developer's own words, list of unknowns), creates tasks and bug reports to the team's own convention, puts estimates and comments on tasks. Use whenever the user gives a ClickUp task id or app.clickup.com/t/ URL, or says «прочитай задачу», «что в таске», «подготовь к грилю», «заведи таску», «багрепорт», «поставь оценку», «напиши коммент в таску», read the task, create a task, bug report, estimate the task, comment on the task — even when ClickUp is never named and even when the request looks like a one-liner."
 compatibility: "Needs the `clickup` CLI from the claude-work-tools repository and a personal ClickUp API token; the skill offers to install the CLI on first use."
 metadata:
   source: "https://github.com/TechTechWizard/skills"
