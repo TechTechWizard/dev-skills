@@ -25,7 +25,7 @@ Update later with `npx skills update`, remove with `npx skills remove`.
 | `quick-edit` | "fix", "rename", "tweak" | Makes a small change while the developer watches, following the configured standards, and reports only what the diff does not show. |
 | `implement-task` | "implement the task", "run this task" | Runs a prepared task on its own: standards, code, two rounds of self-review, verification, commits, handover report. |
 | `commit` | "commit" | Makes one commit by the convention. With no details given, it proposes a message and waits. |
-| `review-mr` | "review this MR", a merge-request link | Reviews another developer's merge request against the checklist and posts the findings as comments. Never edits the code. |
+| `review-mr` | "review this MR", a merge-request link | Reviews a merge request against the checklist and posts the findings as comments. Never edits the code. |
 | `create-mr` | "create MR", "open a PR" | Pushes a committed branch and opens a merge request for it. |
 
 `quick-edit` and `implement-task` cover different sizes of work. `quick-edit` is for a
