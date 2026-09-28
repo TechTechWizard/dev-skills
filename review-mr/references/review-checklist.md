@@ -2,9 +2,9 @@
 
 The fallback checklist, used when the lookup in `standards.md` finds nothing
 closer. This is the review criteria for
-every path in Step 3: the filter applied to the built-in `code-review` skill's and
-`ocr`'s findings, and the checklist for your own review pass when neither tool is
-available. Review the diff, not the surrounding code.
+every path in Step 3: the filter applied to the built-in `code-review` skill's
+findings, and the checklist for your own review pass when it is not available.
+Review the diff, not the surrounding code.
 
 ## 1. Implementation
 

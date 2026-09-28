@@ -182,52 +182,31 @@ one cycle. A review pass with zero findings ends the loop — no second cycle ne
 second cycle still leaves findings, stop and report them honestly in the handover —
 do not spin a third time.
 
-**Reviewers:**
-
-1. **Built-in `code-review` skill** — always. Effort `medium` by default; **always
-   `high` when the diff touches auth, permissions, money/billing, or personal data**
-   ("money" means any code computing amounts a customer pays or is owed).
-   Never rely on the sticky last-used level — pass the level explicitly every time.
-   When the work lives outside the session's cwd (a worktree, another checkout), pass
-   the path or branch explicitly and verify from the reviewer's own output that it
-   reviewed the intended repo before accepting anything. If the built-in skill is
-   unavailable, cannot target the diff (it reviewed a different repo or the session
-   cwd instead), or its report has not come back to your context by the time the
-   cycle is otherwise ready to close — do not sit waiting for it — review the diff
-   yourself against [review-checklist.md](references/review-checklist.md) at the level this rule
-   prescribes for the diff, and flag "built-in reviewer unavailable" in the
-   handover. This manual pass takes the built-in reviewer's slot in the comparison
-   below; a report that arrives after the slot was filled counts as confirmation
-   (or extra findings for the current cycle), never as a new cycle.
-2. **`ocr` (open-code-review) in delegation mode** — optional, only when the CLI is
-   installed (`command -v ocr`). Delegation needs no LLM key: run
-   `ocr delegate preview` to get its file selection for the change, then
-   `ocr delegate rule <files>` — passing the file paths preview listed, one
-   argument per file, without its markers or diff stats — for the resolved review
-   rules, and apply those rules to the same diff as a second review pass yourself.
-   Follow the rules' own precision guidance; absent one, use the level rule 1
-   prescribes for this diff. All of it
-   silently — no questions to the developer. If `ocr` is absent or errors, continue
-   on the built-in reviewer alone — never interrupt the run over it; the handover's
-   "which reviewers ran" line covers the fact, no complaint needed.
+**Reviewer: the built-in `code-review` skill** — always. Effort `medium` by default;
+**always `high` when the diff touches auth, permissions, money/billing, or personal
+data** ("money" means any code computing amounts a customer pays or is owed). Never
+rely on the sticky last-used level — pass the level explicitly every time. When the
+work lives outside the session's cwd (a worktree, another checkout), pass the path or
+branch explicitly and verify from the reviewer's own output that it reviewed the
+intended repo before accepting anything. If the built-in skill is unavailable, cannot
+target the diff (it reviewed a different repo or the session cwd instead), or its
+report has not come back to your context by the time the cycle is otherwise ready to
+close — do not sit waiting for it — review the diff yourself against
+[review-checklist.md](references/review-checklist.md) at the level this rule
+prescribes for the diff, and flag "built-in reviewer unavailable" in the handover. A
+report that arrives after the manual pass counts as confirmation (or extra findings
+for the current cycle), never as a new cycle.
 
 The categories in [review-checklist.md](references/review-checklist.md) are the review criteria on every
-path — for the built-in skill's findings, for `ocr`'s, and for your own review pass.
+path — for the built-in skill's findings and for your own review pass.
 
-Merge the findings from both before fixing. Every finding passes the standards filter
-first: anything that contradicts the standard from Step 1 or the task's stated
+Every finding passes the standards filter before fixing: anything that contradicts
+the standard from Step 1 or the task's stated
 scope is dropped, not applied. Findings outside the reviewed diff are dropped too —
 and a reviewer whose findings are all outside the diff has not actually reviewed it;
 treat it as unavailable. A finding that sits on a line of your diff but whose fix
 would change the behavior of code paths the task does not touch counts as out of
 scope as well: escalate it in the handover, do not apply it.
-
-When both reviewers ran, keep the raw counts for the handover comparison section:
-findings per reviewer, overlap, and what only one of them caught. Count only
-findings that survive the standards filter — an observation considered and rejected
-is not a finding. When both return zero, still state the one-line comparison and
-name each reviewer's rejected candidates. This is collected automatically and kept
-for comparing reviewers — the developer does nothing extra.
 
 **Additionally:** when the diff changes auth/authorization logic, parsing of
 untrusted input (a new parser, deserializer, or raw-byte handling — standard
@@ -313,10 +292,9 @@ never pad it with the appearance of verification]
 and "live verification skipped by the developer's choice" when option 3 was chosen at intake]
 
 ## Ревью
-[which reviewers actually ran — canonical form: "встроенный code-review (уровень N); ocr в прогоне не участвовал" / "+ ocr delegation pass" / "ручной проход по review-checklist.md (за встроенного)"; combine the forms with "+" when cycles or slots used different reviewers]
+[which reviewer actually ran — canonical form: "встроенный code-review (уровень N)" / "ручной проход по review-checklist.md (за встроенного)"; combine the forms with "+" when cycles used different ones]
 [simplify: ran, or skipped with the reason]
 [findings fixed; findings remaining after 2 cycles, if any]
-[when both reviewers ran: built-in N findings / ocr M findings, overlap K, unique-to-one listed in one line each]
 
 ## Куда смотреть в первую очередь
 [the 1–3 places a human should read with attention]
