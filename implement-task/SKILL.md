@@ -106,8 +106,8 @@ the only other exception:
 Find the team's standard for the stack this task touches, by the lookup in
 [standards.md](references/standards.md): list `<project>/.claude/standards/` first, then
 `~/.claude/standards/`, and find what is in those folders about this stack — a document,
-or a directory whose document names say what each one covers. Then a knowledge base over
-MCP if one is configured, then the fallback that ships with the skill. Before the first
+or a directory whose document names say what each one covers. Then the fallback that
+ships with the skill. Before the first
 line of code:
 
 - **Name the documents in a message, before you open them**: one line of text,

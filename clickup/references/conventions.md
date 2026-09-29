@@ -28,9 +28,8 @@ link, and file-search tools built on ripgrep skip links unless told to follow th
 OpenCode's `glob` answers "No files found" for a full slot, and the session then writes to
 the fallback believing there is no convention.
 
-When neither folder says anything about writing a task or a defect, and a company
-knowledge base is configured over MCP, search that. Last comes the fallback shipped with
-this skill: `task.md` and `bug.md` next to this file. They are general practice rather
+When neither folder says anything about writing a task or a defect, the fallback shipped
+with this skill answers: `task.md` and `bug.md` next to this file. They are general practice rather
 than anyone's house rules, deliberately thin, so that somebody with none of the above
 still writes to a stated shape instead of to none.
 

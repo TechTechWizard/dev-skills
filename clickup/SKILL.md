@@ -52,8 +52,7 @@ reader's notification.
 The naming rule, the description style and the shape of a bug report are the team's, not
 this skill's, and they are looked up rather than shipped:
 list `<project>/.claude/standards/`, then `~/.claude/standards/`, and open what is there
-about writing a task or a defect. Then a knowledge base over MCP, then a thin fallback
-here. The full rule, including what to say when nothing answers, is in
+about writing a task or a defect. Then a thin fallback here. The full rule, including what to say when nothing answers, is in
 `references/conventions.md`.
 
 ## Which protocol

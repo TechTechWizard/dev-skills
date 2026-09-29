@@ -37,10 +37,10 @@ the documents inside linked directories, and the read tool pointed at the folder
 shows its entries as well. An empty answer from a pattern search is not evidence that the
 folder is empty; only one of these listings is.
 
-When neither folder answers for the stack being touched, and a company knowledge base is
-configured over MCP, search that. If a fallback ships with this skill, it comes last; it
-is general practice rather than anyone's house rules, and its only job is that a developer
-with nothing set up still works to a stated bar instead of to nothing.
+When neither folder answers for the stack being touched, the fallback that ships with this
+skill answers, if there is one. It is general practice rather than anyone's house rules,
+and its only job is that a developer with nothing set up still works to a stated bar
+instead of to nothing.
 
 ## What to open
 

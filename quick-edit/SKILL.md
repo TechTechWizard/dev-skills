@@ -29,7 +29,7 @@ developer can redirect you before the work rather than after.
    [standards.md](references/standards.md): list `<project>/.claude/standards/`, then
    `~/.claude/standards/`, and find what is in there about the stack you are editing —
    a document, or a directory of documents, whichever the developer put in the folder.
-   Then a knowledge base over MCP, then the fallback here. Before the edit, three things
+   Then the fallback here. Before the edit, three things
    in this order:
    - **Name the documents in a message, before you open them**: one line of text to
      the developer, `Стандарт: <full path>, <full path>`. For a change to code the

@@ -19,7 +19,7 @@ code takes the decision away from its author and hides the disagreement.
 Find the team's review standard and the standard for the touched stack, by the lookup
 in [standards.md](references/standards.md): list `<project>/.claude/standards/`, then
 `~/.claude/standards/`, and open what is there about reviewing and about the stack the
-diff touches. Then a knowledge base over MCP. Open them before reading any of the diff. The fallback when nothing closer exists is
+diff touches. Open them before reading any of the diff. The fallback when nothing closer exists is
 [review-checklist.md](references/review-checklist.md), which ships with this skill.
 Read them with the Read tool — a short document whole, a long one by the sections its
 headings say the diff touches. A keyword grep over a document only finds the rules you

@@ -16,7 +16,7 @@ allowed-tools: Read Grep Glob Bash
 **Read the convention before you write the message — do not compose one from memory.**
 List `<project>/.claude/standards/`, then `~/.claude/standards/`, and open what is there
 about commit messages — the file is usually called `commit`, but it is the folder that
-answers, not this sentence. Then a knowledge base over MCP if one is configured, then
+answers, not this sentence. Then
 [commit-convention.md](references/commit-convention.md), which ships with this skill.
 Open the file, do not assume what it says.
 The full rule is in [standards.md](references/standards.md).

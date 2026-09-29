@@ -47,8 +47,8 @@ and bug conventions, from the same folder, in this order:
    works on it.
 2. `~/.claude/standards/` — personal standards.
 
-After that comes a knowledge base over MCP, if one is configured, and then the general
-guidance each skill ships with.
+When neither folder has a matching standard, each skill falls back to the general guidance
+it ships with.
 
 The folder can hold documents, symbolic links to documents, or symbolic links to whole
 directories of documents. The skills do not expect particular file names: a session lists
