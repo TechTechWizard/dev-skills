@@ -1,7 +1,7 @@
 ---
 name: quick-edit
 description: "A small change the developer is watching: fix a bug in this file, rename it, add the field, adjust the copy. Reads the team standard for the touched stack, keeps the change surgical, runs the tests that already cover it, and answers with what the diff does not say. Trigger on «поправь», «почини», «переименуй», «добавь», «убери», «исправь», fix, rename, tweak — and on any change small enough that nobody will review it separately. NOT for a prepared task from the tracker: that is implement-task, which runs on its own and hands over a report."
-compatibility: "Needs git. Written for Claude Code; the standards lookup reads ~/.claude/standards/."
+compatibility: "Needs git. Written for Claude Code; the standards lookup reads ~/.agents/standards/."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
@@ -26,8 +26,8 @@ developer can redirect you before the work rather than after.
 ## How
 
 1. **The standard for the touched stack**, by the lookup in
-   [standards.md](references/standards.md): list `<project>/.claude/standards/`, then
-   `~/.claude/standards/`, and find what is in there about the stack you are editing —
+   [standards.md](references/standards.md): list `<project>/.agents/standards/`, then
+   `~/.agents/standards/`, and find what is in there about the stack you are editing —
    a document, or a directory of documents, whichever the developer put in the folder.
    Then the fallback here. Before the edit, three things
    in this order:

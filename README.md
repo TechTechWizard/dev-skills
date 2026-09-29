@@ -43,10 +43,10 @@ The skills do not include coding standards or task conventions. `quick-edit`,
 `implement-task`, `commit` and `review-mr` read code standards, and `clickup` reads task
 and bug conventions, from the same folder, in this order:
 
-1. `<project>/.claude/standards/`, where `<project>` is the root of the repository the
+1. `<project>/.agents/standards/`, where `<project>` is the root of the repository the
    agent is working in. The folder is committed with the code, so everyone who works on
    that repository gets the same standards.
-2. `~/.claude/standards/` — personal standards.
+2. `~/.agents/standards/` — personal standards.
 
 When neither folder has a matching standard, each skill falls back to the general guidance
 it ships with.
@@ -57,12 +57,12 @@ the folder and opens the entries that match the current work. A new entry takes 
 immediately, without changing or updating the skills.
 
 ```sh
-mkdir -p ~/.claude/standards
-ln -s ~/Work/<your-standards>/general.md       ~/.claude/standards/general.md
-ln -s ~/Work/<your-standards>/code-review.md   ~/.claude/standards/code-review.md
-ln -s ~/Work/<your-standards>/commit.md        ~/.claude/standards/commit.md
-ln -s ~/Work/<your-frontend-docs>/docs         ~/.claude/standards/frontend
-ln -s ~/Work/<your-docs>/task-convention.md    ~/.claude/standards/task.md
+mkdir -p ~/.agents/standards
+ln -s ~/Work/<your-standards>/general.md       ~/.agents/standards/general.md
+ln -s ~/Work/<your-standards>/code-review.md   ~/.agents/standards/code-review.md
+ln -s ~/Work/<your-standards>/commit.md        ~/.agents/standards/commit.md
+ln -s ~/Work/<your-frontend-docs>/docs         ~/.agents/standards/frontend
+ln -s ~/Work/<your-docs>/task-convention.md    ~/.agents/standards/task.md
 ```
 
 Name each entry after the stack or the activity it covers, because the session chooses
@@ -88,7 +88,7 @@ Only a supported agent is required. Some skills use additional tools:
 OpenCode reads `~/.agents/skills/`, where `npx skills` puts the canonical copies, so the
 skills themselves need no setup. The standards folder does: OpenCode gates every read
 outside the project directory behind `permission.external_directory`, whose default is
-`ask`. The skill directories are allowed automatically, `~/.claude/standards/` is not. In
+`ask`. The skill directories are allowed automatically, `~/.agents/standards/` is not. In
 a headless run nobody can answer the prompt, so the host replies "The user rejected
 permission" and the session ends with exit code 0 and no final text. One entry in
 `~/.config/opencode/opencode.json` fixes it:
@@ -97,8 +97,8 @@ permission" and the session ends with exit code 0 and no final text. One entry i
 {
   "permission": {
     "external_directory": {
-      "~/.claude/standards/**": "allow",
-      "/Users/<you>/.claude/standards/**": "allow",
+      "~/.agents/standards/**": "allow",
+      "/Users/<you>/.agents/standards/**": "allow",
       "~/Work/<your-docs>/**": "allow",
       "/Users/<you>/Work/<your-docs>/**": "allow"
     }
@@ -110,7 +110,7 @@ The second pair of lines covers the directories the symbolic links in the standa
 point to. Some models (gemini-3.1-pro in some runs) read the link's target path rather
 than the link, and the target is outside the folder. Each path is written twice, with `~`
 and absolute, because models spell it differently: gpt-5 in some runs requested
-`/Users/<name>/.claude/standards/` literally. On an ordinary setup both lines match the
+`/Users/<name>/.agents/standards/` literally. On an ordinary setup both lines match the
 same directory; they differ when OpenCode runs with a `HOME` other than the account's (a
 wrapper, a sandbox), and then the absolute line is the one that allows the read.
 

@@ -104,8 +104,8 @@ the only other exception:
 ## Step 1 — Standards
 
 Find the team's standard for the stack this task touches, by the lookup in
-[standards.md](references/standards.md): list `<project>/.claude/standards/` first, then
-`~/.claude/standards/`, and find what is in those folders about this stack — a document,
+[standards.md](references/standards.md): list `<project>/.agents/standards/` first, then
+`~/.agents/standards/`, and find what is in those folders about this stack — a document,
 or a directory whose document names say what each one covers. Then the fallback that
 ships with the skill. Before the first
 line of code:

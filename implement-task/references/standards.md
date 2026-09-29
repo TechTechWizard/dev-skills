@@ -14,10 +14,10 @@ not by a skill learning its name first.
 
 Two folders, in this order:
 
-1. **`<project>/.claude/standards/`** — the project's own, committed into the repository.
+1. **`<project>/.agents/standards/`** — the project's own, committed into the repository.
    A client project with its own code guide overrides everything else, which is the point
    of looking here first.
-2. **`~/.claude/standards/`** — the developer's own.
+2. **`~/.agents/standards/`** — the developer's own.
 
 For the same subject the project's folder wins and the lookup stops there. Subjects the
 project says nothing about still come from the developer's folder: a project that ships
@@ -86,8 +86,8 @@ have said whose rule it is.
 ## Say which source answered
 
 One line, out loud, once, with the document and what reading it found: "standards from the
-project, `.claude/standards/php.md`: request classes validate every string with a length
-limit", "standard from `~/.claude/standards/frontend/<section>/<code-style>.md`,
+project, `.agents/standards/php.md`: request classes validate every string with a length
+limit", "standard from `~/.agents/standards/frontend/<section>/<code-style>.md`,
 section on components: правила про это нет", "nothing in the slot for this stack, working to
 the skill's fallback". Put the same line in the answer or the handover report, because a
 reader judging the result needs to know which bar it was measured against — and "the
@@ -95,8 +95,8 @@ document has no rule about this" is a finding too, one that tells the reader the
 the diff was yours.
 
 Naming the file rather than the folder matters, and when the slot entry is a directory the
-file is the document inside it: `~/.claude/standards/frontend/nextjs/<document>.md`, not
-`~/.claude/standards/frontend/`. The line is a claim that a document was read, and a reader
+file is the document inside it: `~/.agents/standards/frontend/nextjs/<document>.md`, not
+`~/.agents/standards/frontend/`. The line is a claim that a document was read, and a reader
 checks it against the files the session actually opened; a folder that exists proves
 nothing about what was read, a document that was only grepped was not read, and a checkout
 nobody has pulled answers with last year's rules while looking entirely current.

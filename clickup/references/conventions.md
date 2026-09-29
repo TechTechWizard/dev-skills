@@ -13,10 +13,10 @@ yesterday shows up by someone putting a file in the folder.
 
 Two folders, in this order:
 
-1. **`<project>/.claude/standards/`** — the project's own. A client project with its own
+1. **`<project>/.agents/standards/`** — the project's own. A client project with its own
    way of naming tasks overrides everything else, which is the point of looking here
    first.
-2. **`~/.claude/standards/`** — the developer's own.
+2. **`~/.agents/standards/`** — the developer's own.
 
 For the same subject the project's folder wins and the lookup stops there. What lies
 inside can be a document, a symbolic link to one, or a symbolic link to a directory of
@@ -43,7 +43,7 @@ a list of what must be there.
 ## Say which source answered, and what to do when none does
 
 One line, out loud, once, naming the file rather than the folder — "convention from the
-project", "convention from `~/.claude/standards/task.md`", "nothing in the slot about
+project", "convention from `~/.agents/standards/task.md`", "nothing in the slot about
 writing tasks, working to the skill's fallback" — and carry on. A
 missing convention never stops the work, and it never becomes a question to the user
 either: they know what they have installed.

@@ -4,7 +4,7 @@ weight: 1
 ---
 
 The request asks for the text of a task and explicitly says not to create it. It runs in an
-environment where no team convention exists anywhere: no `.claude/standards` in the project,
+environment where no team convention exists anywhere: no `.agents/standards` in the project,
 none in the home directory. The skill's own thin fallback is therefore
 the only thing that can answer.
 

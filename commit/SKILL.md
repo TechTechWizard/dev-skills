@@ -1,7 +1,7 @@
 ---
 name: commit
 description: "Commit what is in the working tree, by the team convention: type and scope, imperative English subject, the task reference, one logical change per commit. Trigger on «закоммить», «закоммить изменения», «сохрани изменения», «сделай коммит», commit, git commit — including the bare word with no details, where it proposes a message and waits for a yes. Does not push and does not create a merge request: that is create-mr."
-compatibility: "Needs git. Written for Claude Code; the standards lookup reads ~/.claude/standards/."
+compatibility: "Needs git. Written for Claude Code; the standards lookup reads ~/.agents/standards/."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
@@ -14,7 +14,7 @@ allowed-tools: Read Grep Glob Bash
 ## The convention
 
 **Read the convention before you write the message — do not compose one from memory.**
-List `<project>/.claude/standards/`, then `~/.claude/standards/`, and open what is there
+List `<project>/.agents/standards/`, then `~/.agents/standards/`, and open what is there
 about commit messages — the file is usually called `commit`, but it is the folder that
 answers, not this sentence. Then
 [commit-convention.md](references/commit-convention.md), which ships with this skill.

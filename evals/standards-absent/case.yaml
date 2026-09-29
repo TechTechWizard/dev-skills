@@ -19,7 +19,7 @@ graders:
     criteria: |
       Creating the file is setup and is not graded. What is graded is the change that
       follows, made in an environment where no team standard exists anywhere: no
-      .claude/standards in the project, none in the home directory.
+      .agents/standards in the project, none in the home directory.
 
       It passes when all of these hold:
 

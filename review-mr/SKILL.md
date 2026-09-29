@@ -17,8 +17,8 @@ code takes the decision away from its author and hides the disagreement.
 ## 1. The standard
 
 Find the team's review standard and the standard for the touched stack, by the lookup
-in [standards.md](references/standards.md): list `<project>/.claude/standards/`, then
-`~/.claude/standards/`, and open what is there about reviewing and about the stack the
+in [standards.md](references/standards.md): list `<project>/.agents/standards/`, then
+`~/.agents/standards/`, and open what is there about reviewing and about the stack the
 diff touches. Open them before reading any of the diff. The fallback when nothing closer exists is
 [review-checklist.md](references/review-checklist.md), which ships with this skill.
 Read them with the Read tool — a short document whole, a long one by the sections its
