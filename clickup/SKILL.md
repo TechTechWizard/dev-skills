@@ -37,8 +37,8 @@ executables, so the CLI arrives from its own repository. If the shell answers
 `protocols/setup.md` — that is an expected first run, not a broken installation.
 
 **Finding a list id**: `clickup shared` prints every folder shared with this token and the
-lists inside it. Start there. `spaces`, `folders` and `lists` need a space id, which a
-member who reaches projects through shared folders can never obtain.
+lists inside it. Start there: the CLI has no command for spaces, because the space
+endpoints answer an empty list to a member who reaches projects through shared folders.
 
 Reading (`task`, `task --markdown`, `comments`, `tasks`, `my-tasks`) changes nothing — run it
 freely. Writing (`create`, `update`, `comment`, `attach`, `tag`) is seen by the manager and
