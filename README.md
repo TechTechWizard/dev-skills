@@ -43,8 +43,9 @@ The skills do not include coding standards or task conventions. `quick-edit`,
 `implement-task`, `commit` and `review-mr` read code standards, and `clickup` reads task
 and bug conventions, from the same folder, in this order:
 
-1. `<project>/.claude/standards/` — committed to the project and shared by everyone who
-   works on it.
+1. `<project>/.claude/standards/`, where `<project>` is the root of the repository the
+   agent is working in. The folder is committed with the code, so everyone who works on
+   that repository gets the same standards.
 2. `~/.claude/standards/` — personal standards.
 
 When neither folder has a matching standard, each skill falls back to the general guidance
