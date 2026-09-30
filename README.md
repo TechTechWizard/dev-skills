@@ -89,9 +89,9 @@ OpenCode reads `~/.agents/skills/`, where `npx skills` puts the canonical copies
 skills themselves need no setup. The standards folder does: OpenCode gates every read
 outside the project directory behind `permission.external_directory`, whose default is
 `ask`. The skill directories are allowed automatically, `~/.agents/standards/` is not. In
-a headless run nobody can answer the prompt, so the host replies "The user rejected
-permission" and the session ends with exit code 0 and no final text. One entry in
-`~/.config/opencode/opencode.json` fixes it:
+a headless run nobody can answer the prompt, so OpenCode rejects the read on its own
+("permission requested: external_directory …; auto-rejecting") and the skill continues
+without the standard. One entry in `~/.config/opencode/opencode.json` fixes it:
 
 ```json
 {
@@ -109,8 +109,8 @@ permission" and the session ends with exit code 0 and no final text. One entry i
 The second pair of lines covers the directories the symbolic links in the standards folder
 point to. Some models (gemini-3.1-pro in some runs) read the link's target path rather
 than the link, and the target is outside the folder. Each path is written twice, with `~`
-and absolute, because models spell it differently: gpt-5 in some runs requested
-`/Users/<name>/.agents/standards/` literally. On an ordinary setup both lines match the
+and absolute, because models spell it differently: gpt-5 requests the absolute
+`/Users/<name>/.agents/standards/` rather than `~`. On an ordinary setup both lines match the
 same directory; they differ when OpenCode runs with a `HOME` other than the account's (a
 wrapper, a sandbox), and then the absolute line is the one that allows the read.
 
