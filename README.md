@@ -107,8 +107,8 @@ without the standard. One entry in `~/.config/opencode/opencode.json` fixes it:
 ```
 
 The second pair of lines covers the directories the symbolic links in the standards folder
-point to. Some models (gemini-3.1-pro in some runs) read the link's target path rather
-than the link, and the target is outside the folder. Each path is written twice, with `~`
+point to. Some models (gemini-3.1-pro) read the link's target path rather than the link,
+and the target is outside the folder. Each path is written twice, with `~`
 and absolute, because models spell it differently: gpt-5 requests the absolute
 `/Users/<name>/.agents/standards/` rather than `~`. On an ordinary setup both lines match the
 same directory; they differ when OpenCode runs with a `HOME` other than the account's (a
@@ -120,8 +120,10 @@ it with the read tool, and never treat an empty glob as an empty folder.
 
 OpenCode reads both `~/.claude/skills/` and `~/.agents/skills/`. When the same set is
 installed in both, it writes a `duplicate skill name` warning per skill into its log
-(visible with `--print-logs`), not into the session output. The warning is harmless; the
-model uses the copy from `~/.agents/skills/`.
+(visible with `--print-logs`), not into the session output, and keeps the copy it found
+first, in `~/.claude/skills/`. The warning is harmless: `npx skills` makes each entry in
+`~/.claude/skills/` a symbolic link to the copy in `~/.agents/skills/`, so both are the
+same file.
 
 ## Repository layout
 
@@ -137,13 +139,11 @@ Each skill declares what it needs to run in its `compatibility:` field: the CLI 
 the authentication it expects, and whether it relies on a built-in skill of the host.
 Check it before installing a single skill rather than the whole set.
 
-Skills sit flat at the root, which is the common layout for Agent Skills repositories.
-
 The Agent Skills format makes every skill self-contained — an installer copies the skill's
 directory and nothing else — so four references (`standards.md`, `review-checklist.md`,
 `commit-convention.md`, `verify-template.md`) exist once per skill that needs them. Edit
-the copy in `shared/` and run `scripts/sync-shared.sh`; the check rejects a commit where
-the copies differ.
+the copy in `shared/` and run `scripts/sync-shared.sh`. CI fails a push or pull request
+where the copies differ, and `make check` runs the same check locally.
 
 **Do not edit an installed skill in place.** `npx skills update` overwrites it without
 asking. To change behaviour, create a separate skill under another name, or add a project
