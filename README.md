@@ -39,22 +39,47 @@ Both `review-mr` and `implement-task` call the built-in skill to look for bugs.
 
 ## Standards
 
-The skills do not include coding standards or task conventions. `quick-edit`,
-`implement-task`, `commit` and `review-mr` read code standards, and `clickup` reads task
-and bug conventions, from the same folder, in this order:
+The skills do not include coding standards or task conventions. They read them from a
+folder, and **the folder is a slot: whatever lies in it is the standard.** Nothing has to be
+requested. Every run of `quick-edit`, `implement-task`, `commit` and `review-mr` lists the
+slot on its own and opens the code standard for the stack it is about to touch; every run of
+`clickup` opens the task and bug conventions the same way. A developer never mentions
+standards in a prompt — asking a skill to "use the standards" changes nothing, and not asking
+does not switch them off.
+
+Two folders are looked at, in this order:
 
 1. `<project>/.agents/standards/`, where `<project>` is the root of the repository the
    agent is working in. The folder is committed with the code, so everyone who works on
-   that repository gets the same standards.
-2. `~/.agents/standards/` — personal standards.
+   that repository gets the same standards. For the subjects it covers it wins.
+2. `~/.agents/standards/` — personal standards, answering every subject the project's
+   folder says nothing about.
 
-When neither folder has a matching standard, each skill falls back to the general guidance
-it ships with.
+When neither folder has a matching standard, the skill says so in one line and falls back
+to the general guidance it ships with. A missing standard never becomes a question to the
+developer.
+
+### How to see that the slot is wired
+
+Each run names the documents it is about to read, in one line of ordinary text before the
+first edit, and repeats the line in its answer or handover report:
+
+```
+Стандарт: ~/.agents/standards/laravel/code-style.md, ~/.agents/standards/general.md
+```
+
+That line is the check. Fill the slot, open a session in a project and ask for a small
+change such as fixing a typo in a message. `quick-edit` should print a line like the one
+above, naming files, not folders. A line saying the slot holds nothing for this stack means
+the folder was not found or is empty: run `ls -L ~/.agents/standards` and compare with what
+you expected to be there.
+
+### Filling the slot
 
 The folder can hold documents, symbolic links to documents, or symbolic links to whole
 directories of documents. The skills do not expect particular file names: a session lists
-the folder and opens the entries that match the current work. A new entry takes effect
-immediately, without changing or updating the skills.
+the folder and opens the entries whose names match the current work. A new entry takes
+effect on the next run, without changing or updating the skills.
 
 ```sh
 mkdir -p ~/.agents/standards
@@ -66,10 +91,9 @@ ln -s ~/Work/<your-docs>/task-convention.md    ~/.agents/standards/task.md
 ```
 
 Name each entry after the stack or the activity it covers, because the session chooses
-entries by name.
-
-When no standard is found, the skill uses its built-in guidance, says which source it
-used, and continues.
+entries by name: `laravel`, `frontend`, `css`, `commit.md`, `task.md`. A team that
+documents a new direction tomorrow drops one more entry in, and the skills start reading it
+without learning its name first.
 
 ## Requirements
 
