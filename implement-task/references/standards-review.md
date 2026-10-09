@@ -21,10 +21,21 @@ The skill's own fallback checklist is not a standard document and gets no review
 
 ## How to run it
 
-1. Write the diff to a file once, so every reviewer reads the same bytes:
-   `git diff <base>...<head> > "$(mktemp -d)/change.diff"` — for `implement-task` the base
-   is where the task's branch started, for `review-mr` the merge request's target branch.
-   Write down the path it prints.
+1. Write the diff to a file once, so every reviewer reads the same bytes, and write down
+   the path. Which diff depends on where the code is:
+   - **Your own work, not yet committed** (`implement-task` reviews before it commits):
+     the working tree against where the task started, plus every new file, because
+     `git diff` never shows an untracked one —
+     ```sh
+     d=$(mktemp -d)/change.diff; git diff <base> > "$d"
+     git ls-files --others --exclude-standard -z | xargs -0 -I{} git diff --no-index /dev/null {} >> "$d"; echo "$d"
+     ```
+     (`git diff --no-index` exits 1 when files differ, which here they always do.)
+   - **Somebody else's branch** (`review-mr`): the same range step 2 already read,
+     `git diff <target>...<source-branch> > "$(mktemp -d)/change.diff"`, with the
+     remote-tracking names when only those were fetched.
+   A diff file that comes out empty means the command is wrong, not that the change is
+   clean: look at it before starting anyone.
 2. Start one subagent per document, all at once, through the `Agent` tool, with the prompt
    below and nothing else: no task statement, no summary of the change, no other document.
    Anything you add is something for the rule to compete with.
@@ -57,8 +68,11 @@ A check that quietly did not happen reads exactly like one that found nothing.
 
 ## What happens to a finding
 
-A finding is kept only when its quoted rule is really in the document: `grep -F` a
-distinctive part of the quote in that file. A paraphrase or a rule from memory is dropped.
+A finding is kept only when its quoted rule is really in the document. Check it with
+`grep -F` on a short run of plain words from the quote — four or five in a row, with no
+punctuation or markup — because documents wrap lines and carry backticks and bold that a
+quote may drop, and a whole-sentence search would throw out real findings for that. A
+paraphrase or a rule from memory, which no such run of words matches, is dropped.
 
 Then it goes through the filter the skill already has for every other reviewer:
 

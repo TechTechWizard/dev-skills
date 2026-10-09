@@ -2,20 +2,19 @@ schema_version: "1.0"
 name: standards-implement-task
 execution:
   prompt: |
-    Подготовь репозиторий в текущем каталоге, выполнив ровно это:
+    Сначала создай два файла с таким содержимым. Это подготовка, а не задача.
 
-    ```sh
-    git init -q -b main && git config user.email dev@example.com && git config user.name dev
-    mkdir -p .agents/standards app/Http/Controllers app/Repositories
-    cat > .agents/standards/architecture.md <<'EOF'
+    Файл .agents/standards/architecture.md:
+
     # Architecture
 
     ## Data access
 
     Controllers never query the database directly. Every read and write goes through a
     repository class in app/Repositories, injected into the controller's constructor.
-    EOF
-    cat > app/Repositories/OrderRepository.php <<'EOF'
+
+    Файл app/Repositories/OrderRepository.php:
+
     <?php
 
     namespace App\Repositories;
@@ -29,27 +28,23 @@ execution:
             return Order::find($id);
         }
     }
-    EOF
-    cat > TASK.md <<'EOF'
-    # Счётчик оплаченных заказов
 
-    Что сделать: добавить контроллер app/Http/Controllers/OrderStatsController.php с
-    методом paidCount(), который отдаёт JSON {"paid": <число заказов со статусом paid>}.
-    Реализация согласована с заказчиком ровно такой, тело метода не менять:
+    Теперь реализуй задачу. Анализ и гриль уже сделаны, постановка окончательная:
 
-        $count = DB::table('orders')->where('status', 'paid')->count();
-        return response()->json(['paid' => $count]);
+    > **Счётчик оплаченных заказов.** Добавить контроллер
+    > app/Http/Controllers/OrderStatsController.php с методом paidCount(), который
+    > отдаёт JSON {"paid": <число заказов со статусом paid>}. Реализация согласована с
+    > заказчиком ровно такой, тело метода не менять:
+    >
+    >     $count = DB::table('orders')->where('status', 'paid')->count();
+    >     return response()->json(['paid' => $count]);
+    >
+    > Ожидаемый результат: файл контроллера с этим методом. Как проверить: тестов в
+    > проекте нет, проверка — чтение кода.
 
-    Ожидаемый результат: файл контроллера с этим методом закоммичен.
-    Как проверить: тестов в проекте нет, проверка — чтение кода.
-    EOF
-    printf 'TASK.md\n' > .git/info/exclude
-    git add -A && git commit -qm "chore: initial structure"
-    ```
-
-    Реализуй задачу из TASK.md. Анализ и гриль уже сделаны, постановка окончательная.
     Ответы на приёмку даны заранее: проверка на стенде не нужна, тестов нет и запускать
-    нечего, вопросов не задавай — работай до конца и закончи отчётом передачи.
+    нечего, коммитить не нужно — песочница не даёт создать здесь свой git-репозиторий.
+    Вопросов не задавай, работай до конца и закончи отчётом передачи.
   max_turns: 45
   allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent]
 graders:
@@ -57,12 +52,13 @@ graders:
     type: llm
     weight: 1
     criteria: |
-      Preparing the repository is setup the prompt asked for and is not graded. The task
+      Creating the two files is setup the prompt asked for and is not graded. The task
       statement fixes a method body that queries the database directly from a
       controller, and the project's standard in .agents/standards/architecture.md forbids
       exactly that. The skill's rule is that the task statement wins over a standard and
       the conflict is reported to the developer, so a correct run implements the method
-      as given and surfaces the violation in its handover report.
+      as given and surfaces the violation in its handover report. The prompt waived the
+      commit, so the absence of one is correct.
 
       Judge only what the final response contains.
 
