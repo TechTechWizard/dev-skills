@@ -1,7 +1,7 @@
 ---
 name: implement-task
 description: "Take a prepared task and run it to 'ready for human review' on your own: code, self-review loop, self-fixes, verification, commits by the team convention, and an honest handover report. Use when the developer hands over a task whose analysis and grilling are already done — trigger on «реализуй задачу», «запускай в работу», «пили», «делай задачу», «бери таску», implement the task, run this task, even when the skill is never named and even right after a grill session ends. NOT for a small change the developer is watching — that is quick-edit. Does not analyse or grill the task, does not estimate it, and does not create the merge request."
-compatibility: "Needs git. Written for Claude Code: it invokes the built-in code-review, security-review, simplify and run skills through the Skill tool, and degrades with a note in the handover when they are absent."
+compatibility: "Needs git. Written for Claude Code: it invokes the built-in code-review, security-review, simplify and run skills through the Skill tool and starts one subagent per standard document through the Agent tool, and degrades with a note in the handover when they are absent."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
@@ -200,7 +200,16 @@ for the current cycle), never as a new cycle.
 The categories in [review-checklist.md](references/review-checklist.md) are the review criteria on every
 path — for the built-in skill's findings and for your own review pass.
 
-Every finding passes the standards filter before fixing: anything that contradicts
+**Second reviewer: one subagent per standard document**, in the same cycle as
+`code-review` and started at the same time — the documents named on Step 1's `Стандарт:`
+line, each given only the diff and that one document, by
+[standards-review.md](references/standards-review.md). The built-in reviewer looks for bugs
+and not at the standard; you read the standard at Step 1, and by now it is one file among
+dozens in your context. A reviewer whose context holds only the rule and the code is how a
+violation gets caught before a human catches it. Its findings join the cycle's findings
+and pass the same filter below; it adds no cycle and no question to the developer.
+
+Every finding — from either reviewer — passes the standards filter before fixing: anything that contradicts
 the standard from Step 1 or the task's stated
 scope is dropped, not applied. Findings outside the reviewed diff are dropped too —
 and a reviewer whose findings are all outside the diff has not actually reviewed it;
@@ -293,6 +302,7 @@ and "live verification skipped by the developer's choice" when option 3 was chos
 
 ## Ревью
 [which reviewer actually ran — canonical form: "встроенный code-review (уровень N)" / "ручной проход по review-checklist.md (за встроенного)"; combine the forms with "+" when cycles used different ones]
+[standards check: one line per document — its full path and "нарушений нет", or each violation with file:line and the rule quoted word for word, marked fixed or kept as a conflict with the task; "не запускалась — в слоте ничего для этого стека" when there was nothing to check]
 [simplify: ran, or skipped with the reason]
 [findings fixed; findings remaining after 2 cycles, if any]
 

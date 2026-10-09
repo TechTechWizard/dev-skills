@@ -1,12 +1,12 @@
 ---
 name: review-mr
 description: "Review somebody else's merge request: read the task it belongs to, check the diff against that task and the team checklist, hunt bugs with the built-in reviewers, and post the findings as comments on the merge request. Trigger on «сделай ревью», «посмотри MR», «проверь мерж реквест», «отревьюй», review this MR, code review — and on any GitLab merge-request URL, even with no other instruction. Read-only on the code: it describes fixes, it never applies them. Reviewing your own fresh work is part of implement-task instead."
-compatibility: "Needs git and `glab` authenticated against your GitLab instance. Reads a ClickUp task through the clickup CLI when it is there and a GitLab issue through the same glab, and reviews without the task when neither can be read. Uses the built-in code-review and security-review skills where the host has them, and reviews the diff by hand where it does not."
+compatibility: "Needs git and `glab` authenticated against your GitLab instance. Reads a ClickUp task through the clickup CLI when it is there and a GitLab issue through the same glab, and reviews without the task when neither can be read. Uses the built-in code-review and security-review skills and one subagent per standard document where the host has them, and does that work by hand where it does not."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
   standard: "https://agentskills.io/specification"
-allowed-tools: Read Grep Glob Bash Skill
+allowed-tools: Read Grep Glob Bash Skill Agent
 ---
 
 # Code review
@@ -203,7 +203,21 @@ this step prescribes, and say in the report that the built-in reviewers were una
 and the hunt was manual. A review that quietly loses its bug-hunting pass reads exactly
 like one that found no bugs.
 
-## 4. Read it yourself, by the checklist
+## 4. Check it against each standard document
+
+Run one subagent per standard document chosen in step 1, all at once, each given only the
+diff and that one document, by [standards-review.md](references/standards-review.md). This
+is not the same as reading the standard yourself in the next step: you will read the diff
+with the checklist, the tools' findings and the merge request's discussion in your context,
+and a rule from the standard competes with all of it. A reviewer that holds only the rule
+and the code does not have that problem.
+
+Its findings pass the same two rules as the built-in reviewers' — raw input, checked
+against the standard and the scope before anything is forwarded — plus the quote check in
+that file. What survives goes into the report with the rule quoted and the document's full
+path; on the merge request it becomes a comment like any other finding.
+
+## 5. Read it yourself, by the checklist
 
 The built-in reviewers are good at correctness and blind to convention: architecture,
 the team's idioms and the quality rules are entirely yours. Go through the checklist
@@ -216,7 +230,7 @@ unfinished screens carry stubs, unimplemented buttons say so to the user, stubs 
 reusable rather than copied, unfinished code carries a clear `TODO:`, and new
 functionality on a production product sits behind a feature flag.
 
-## 5. Two artifacts, never one
+## 6. Two artifacts, never one
 
 The **report** goes to the person who asked for the review: summary, every finding,
 checklist status, or whatever the slot's report document lays out instead. The
@@ -244,7 +258,7 @@ is left out rather than invented, and leaving it out never lowers a finding's cl
 because the quote, the file:line and the command output the review did produce are the
 finding's evidence; and a finding that no section of the document fits goes into the
 section closest to it in meaning rather than being dropped. The comments on the merge
-request stay as step 5 describes them.
+request stay as step 6 describes them.
 
 ```
 ## Summary
@@ -267,6 +281,11 @@ request, and worth their own task.
 
 ### Quality standards
 Stubs, unfinished functionality, feature flags.
+
+### Team standards
+One line per standard document checked in step 4: its full path and "no violations", or
+each violation with file:line, the rule quoted word for word, and whether it is blocking.
+A document whose reviewer did not run is named as such.
 
 ### Done well
 One or two specific decisions that were right. Name the decision, not the person.
