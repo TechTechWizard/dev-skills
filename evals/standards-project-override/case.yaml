@@ -1,0 +1,96 @@
+schema_version: "1.0"
+name: standards-project-override
+execution:
+  prompt: |
+    Подготовь репозиторий в текущем каталоге, выполнив ровно это:
+
+    ```sh
+    git init -q -b main && git config user.email dev@example.com && git config user.name dev
+    mkdir -p .agents/standards dev-standards app/DTO app/Services
+    cat > dev-standards/php-code-style.md <<'EOF'
+    # PHP code style
+
+    ## Properties
+
+    Class properties are always private. Expose data through getter methods.
+
+    ## Methods
+
+    Every method declares its return type.
+    EOF
+    cat > .agents/standards/dto.md <<'EOF'
+    # Data transfer objects
+
+    Classes in app/DTO declare their fields as public readonly properties and have no
+    getters. This replaces the general rule on private properties for everything in
+    app/DTO.
+    EOF
+    git add -A && git commit -qm "chore: initial structure"
+    git checkout -qb feature/order-data
+    cat > app/DTO/OrderData.php <<'EOF'
+    <?php
+
+    namespace App\DTO;
+
+    final class OrderData
+    {
+        public function __construct(
+            public readonly int $id,
+            public readonly string $status,
+        ) {
+        }
+    }
+    EOF
+    cat > app/Services/OrderService.php <<'EOF'
+    <?php
+
+    namespace App\Services;
+
+    use App\DTO\OrderData;
+
+    class OrderService
+    {
+        public function toData(array $row)
+        {
+            return new OrderData($row['id'], $row['status']);
+        }
+    }
+    EOF
+    git add -A && git commit -qm "feat: order data object"
+    ```
+
+    В этой песочнице домашний каталог закрыт, поэтому папка dev-standards/ в корне
+    репозитория в этом прогоне играет роль моей папки стандартов ~/.agents/standards/:
+    это мой общий стандарт, а .agents/standards/ — стандарт проекта.
+
+    Сделай ревью ветки feature/order-data против main. Мержреквеста нет и glab не нужен:
+    дифф бери из git. Ничего никуда не публикуй, отчёт дай в ответе.
+  max_turns: 30
+  allowed_tools: [Read, Glob, Grep, Bash, Skill, Agent]
+graders:
+  - name: criteria
+    type: llm
+    weight: 1
+    criteria: |
+      Preparing the repository is setup and is not graded. The general standard
+      (dev-standards/php-code-style.md, standing in for the developer's own folder) has
+      two rules the diff touches. One of them — properties are always private — is
+      replaced for app/DTO by the project's standard .agents/standards/dto.md, so the
+      public readonly properties of OrderData are correct. The other — every method
+      declares its return type — is not replaced by anything, and
+      OrderService::toData() breaks it.
+
+      Judge only what the final response contains.
+
+      It passes when all of these hold:
+
+      - The report names the missing return type on OrderService::toData() as a
+        violation, quoting the rule recognisably in the document's own words ("Every
+        method declares its return type").
+      - The report does not list the public properties of OrderData as a violation or
+        as something to change. Saying that the project standard allows them, or that a
+        general-standard finding was dropped because dto.md replaces it, is fine.
+
+      It fails when: the public readonly properties of OrderData appear as a finding to
+      fix; the missing return type is not reported; or the missing return type is
+      reported with no rule quoted.

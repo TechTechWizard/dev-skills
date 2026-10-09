@@ -1,0 +1,94 @@
+schema_version: "1.0"
+name: standards-review-mr
+execution:
+  prompt: |
+    Подготовь репозиторий в текущем каталоге, выполнив ровно это:
+
+    ```sh
+    git init -q -b main && git config user.email dev@example.com && git config user.name dev
+    mkdir -p .agents/standards app/Http/Controllers app/Repositories
+    cat > .agents/standards/architecture.md <<'EOF'
+    # Architecture
+
+    ## Data access
+
+    Controllers never query the database directly. Every read and write goes through a
+    repository class in app/Repositories, injected into the controller's constructor.
+
+    ## Naming
+
+    Repository classes are named after the model in the singular: OrderRepository, not
+    OrdersRepository.
+    EOF
+    cat > app/Repositories/OrderRepository.php <<'EOF'
+    <?php
+
+    namespace App\Repositories;
+
+    use App\Models\Order;
+
+    class OrderRepository
+    {
+        public function find(int $id): ?Order
+        {
+            return Order::find($id);
+        }
+    }
+    EOF
+    git add -A && git commit -qm "chore: initial structure"
+    git checkout -qb feature/order-stats
+    cat > app/Http/Controllers/OrderStatsController.php <<'EOF'
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use Illuminate\Http\JsonResponse;
+    use Illuminate\Support\Facades\DB;
+
+    class OrderStatsController extends Controller
+    {
+        public function paidCount(): JsonResponse
+        {
+            $count = DB::table('orders')->where('status', 'paid')->count();
+
+            return response()->json(['paid' => $count]);
+        }
+    }
+    EOF
+    git add -A && git commit -qm "feat: paid orders counter"
+    ```
+
+    Теперь сделай ревью ветки feature/order-stats против main в этом репозитории.
+    Мержреквеста нет и glab не нужен: дифф бери из git. Ничего никуда не публикуй,
+    отчёт дай в ответе.
+  max_turns: 30
+  allowed_tools: [Read, Glob, Grep, Bash, Skill, Agent]
+graders:
+  - name: criteria
+    type: llm
+    weight: 1
+    criteria: |
+      Preparing the repository is setup the prompt asked for and is not graded. What is
+      graded is the review that follows, and the point of the case is one defect a bug
+      hunter does not see: the new OrderStatsController queries the database directly
+      (`DB::table('orders')`), while the project's standard in
+      .agents/standards/architecture.md says controllers never do that and must go through
+      a repository.
+
+      Judge only what the final response contains.
+
+      It passes when all of these hold:
+
+      - The review report names the direct database query in OrderStatsController as a
+        violation of the team's or project's standard.
+      - The report quotes the rule from architecture.md recognisably in the document's own
+        words — "Controllers never query the database directly", or the full sentence
+        around it — and attributes it to that document. A paraphrase with no quotation
+        does not count.
+      - The report does not claim that anything was posted to GitLab or anywhere else,
+        and does not claim to have edited the code.
+
+      It fails when: the violation is missing; it is mentioned only as a general
+      "better practice" with no rule from the document quoted; a rule is quoted that the
+      document does not contain; or the response claims to have changed the code or
+      published comments.

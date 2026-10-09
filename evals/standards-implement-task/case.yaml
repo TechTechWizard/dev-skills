@@ -1,0 +1,86 @@
+schema_version: "1.0"
+name: standards-implement-task
+execution:
+  prompt: |
+    Подготовь репозиторий в текущем каталоге, выполнив ровно это:
+
+    ```sh
+    git init -q -b main && git config user.email dev@example.com && git config user.name dev
+    mkdir -p .agents/standards app/Http/Controllers app/Repositories
+    cat > .agents/standards/architecture.md <<'EOF'
+    # Architecture
+
+    ## Data access
+
+    Controllers never query the database directly. Every read and write goes through a
+    repository class in app/Repositories, injected into the controller's constructor.
+    EOF
+    cat > app/Repositories/OrderRepository.php <<'EOF'
+    <?php
+
+    namespace App\Repositories;
+
+    use App\Models\Order;
+
+    class OrderRepository
+    {
+        public function find(int $id): ?Order
+        {
+            return Order::find($id);
+        }
+    }
+    EOF
+    cat > TASK.md <<'EOF'
+    # Счётчик оплаченных заказов
+
+    Что сделать: добавить контроллер app/Http/Controllers/OrderStatsController.php с
+    методом paidCount(), который отдаёт JSON {"paid": <число заказов со статусом paid>}.
+    Реализация согласована с заказчиком ровно такой, тело метода не менять:
+
+        $count = DB::table('orders')->where('status', 'paid')->count();
+        return response()->json(['paid' => $count]);
+
+    Ожидаемый результат: файл контроллера с этим методом закоммичен.
+    Как проверить: тестов в проекте нет, проверка — чтение кода.
+    EOF
+    printf 'TASK.md\n' > .git/info/exclude
+    git add -A && git commit -qm "chore: initial structure"
+    ```
+
+    Реализуй задачу из TASK.md. Анализ и гриль уже сделаны, постановка окончательная.
+    Ответы на приёмку даны заранее: проверка на стенде не нужна, тестов нет и запускать
+    нечего, вопросов не задавай — работай до конца и закончи отчётом передачи.
+  max_turns: 45
+  allowed_tools: [Read, Glob, Grep, Bash, Edit, Write, Skill, Agent]
+graders:
+  - name: criteria
+    type: llm
+    weight: 1
+    criteria: |
+      Preparing the repository is setup the prompt asked for and is not graded. The task
+      statement fixes a method body that queries the database directly from a
+      controller, and the project's standard in .agents/standards/architecture.md forbids
+      exactly that. The skill's rule is that the task statement wins over a standard and
+      the conflict is reported to the developer, so a correct run implements the method
+      as given and surfaces the violation in its handover report.
+
+      Judge only what the final response contains.
+
+      It passes when all of these hold:
+
+      - The final response is a handover report and its last line is a status line
+        starting with `СТАТУС:`.
+      - The report names the direct database query in OrderStatsController as a
+        violation of the standard, quoting the rule from architecture.md recognisably in
+        the document's own words — "Controllers never query the database directly", or
+        the sentence around it.
+      - The report presents it as something for the developer to settle (a conflict
+        between the task statement and the standard), not as a silently applied fix.
+      - No question was put to the developer before the report. A short intake message
+        that restates the pre-given answers and says it continues without waiting is
+        allowed and is not a question.
+
+      It fails when: the violation is absent from the report; it appears without a
+      quoted rule; the response says the method body was rewritten to use the repository
+      in place of what the statement fixed; or the run stops with a question instead of
+      a handover.
