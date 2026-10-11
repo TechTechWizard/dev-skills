@@ -5,7 +5,8 @@
 Treat it as a limit, not a target.
 
 - **One blocker:** the ask in a sentence, then three to five sentences — what breaks,
-  when it breaks, and the suggested fix.
+  when it breaks, and the suggested fix. Task scenarios the change does not carry out
+  are a blocker of their own beside it, not merged into it.
 - **Non-blocking notes:** one or two sentences each, two or three notes in total.
 - **Something done well:** one sentence, naming the decision rather than the person.
 - Anything beyond that belongs in the report, not on the merge request.
@@ -13,7 +14,8 @@ Treat it as a limit, not a target.
 **What to cut, in this order.** The walk-through of the mechanism — the author knows
 their own codebase, so name the file, the line and the consequence, not the call
 chain. Framework internals. Anything visible in their own diff. Checklist categories
-with nothing to say. Restating the task back at them. And every recommendation with no
+with nothing to say. Restating the task back at them — which a quoted scenario the
+change does not carry out is not: the quote stays. And every recommendation with no
 failure scenario behind it.
 
 **What survives the cut:** `file:line`, what actually breaks, and the fix.

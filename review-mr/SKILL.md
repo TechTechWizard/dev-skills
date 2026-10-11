@@ -57,8 +57,8 @@ that segment is a word, not an id. Not the title, not a search for a similarly n
 task, not a guess from the diff.
 
 **Read it with the `clickup` command**, as the `clickup` skill documents it: `clickup
-task <id> --markdown` for the description as stored, `clickup comments <id>` for the
-comments, nothing more. The comments are not optional: a clarification that narrowed or
+task <id>` for the card with the task's name, `clickup task <id> --markdown` for the
+description as stored, `clickup comments <id>` for the comments, nothing more. The comments are not optional: a clarification that narrowed or
 widened the scope usually lives there, and it changes the task — the later word stands.
 Only when the thread itself leaves open which word stands does the finding quote both
 instead of picking one. Write down what the task says is to be done and how it is
@@ -94,8 +94,9 @@ git diff <target>...<source-branch>
   is the author's, not the review's. A defect inside that extra work is still a finding
   of its own, wherever its severity puts it.
 - A diff that carries out every scenario gets no finding about the task at all.
-- On the merge request, the unmet scenarios are one blocker under the comment budget:
-  one comment that lists them, each quoted, never a comment per scenario.
+- On the merge request, the unmet scenarios are one blocking comment of their own,
+  separate from any blocker in the code: it lists them, each quoted, never a comment
+  per scenario.
 - A task that states nothing checkable — no scenarios, no expected result, a one-line
   name — is measured against what it does say, and the report line says the task gave
   nothing more to check against.
@@ -145,8 +146,9 @@ Two rules when using it here:
 - **Never pass `--comment` or `--fix`.** Posting belongs to this skill and targets
   GitLab; `--comment` targets GitHub pull requests. And a reviewer does not change code.
 - **Its findings are raw input, not the review.** Every one passes the checklist and
-  the standard first. A finding that contradicts the standard or the task's stated
-  scope is dropped or reframed, not forwarded.
+  the standard first. A finding that contradicts the standard or a decision the task
+  made is dropped or reframed, not forwarded. A defect in work beyond the task is not
+  such a finding: it stays, as step 2 says.
 
 When the diff touches authentication, authorization, parsing of untrusted input, file
 uploads or secrets, also run the built-in `security-review` skill on the branch. Same
