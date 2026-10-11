@@ -60,9 +60,10 @@ the team's convention names a branch without a task after its author — and tha
 answer, not a gap: nothing is asked, and the merge request goes out without a task
 reference, as the title section below describes.
 
-With an id, read the task's name and its link: through the `clickup` skill when it is
-installed, or `clickup task <TASK_ID>`, whose output carries both. The link is the one
-ClickUp gives for the task.
+With an id, read the task's name and its link with `clickup task <TASK_ID>` called
+directly, whose output carries both. Not through the `clickup` skill: its reading
+protocol stops and asks when ClickUp refuses an id, and this skill does not ask. The link
+is the one ClickUp gives for the task.
 
 When the task cannot be read — no CLI, no token, or ClickUp answers that it does not know
 the id — nothing is asked either. The title is worded from the diff, as the title section
@@ -70,10 +71,11 @@ describes, and the link is built from the id: `https://app.clickup.com/t/{TASK_I
 ClickUp id, and for a custom id `https://app.clickup.com/t/<workspace_id>/{TASK_ID}`, with
 the workspace number taken from the project's `CLAUDE.md`. A custom id with no workspace
 number anywhere gets no link and no `Task:` line, because a link without that number
-opens nothing. Each of these leaves one line in the final message saying why: an id
-ClickUp did not recognise is usually a typo in the branch name, so that line asks the
-developer to check it; a missing workspace number is named as the reason the `Task:`
-line is absent.
+opens nothing. Each of these leaves one line in the final message saying why. ClickUp
+answers an unknown id and a task in a workspace the token cannot see with the same 401,
+so the line for a refused id names both causes — a typo in the branch name, or a task
+outside the token's workspaces — and asks the developer to check which; a missing
+workspace number is named as the reason the `Task:` line is absent.
 
 ## Branched from another unmerged branch
 
@@ -113,9 +115,16 @@ Title: `{TASK_ID}: {Task name}`, where the task name is the task's own name tran
 into English — not a summary of the commits, and not shortened to fit a length. When
 the task has an id but its name could not be read, the part after the colon states what
 the change does, worded from the diff, in English. Without an id the title is the
-subject of the last commit that is not a merge, exactly as written
-(`git log -1 --no-merges --format=%s <target>..HEAD`), so a commit that came in
-with a merge of `<target>` never names this branch.
+subject of the branch's own last commit that is not a merge, exactly as written:
+
+```sh
+git fetch origin
+git log -1 --first-parent --no-merges --format=%s "origin/<target>..HEAD"
+```
+
+`origin/<target>` after the fetch, because the local `<target>` may be stale or absent,
+and `--first-parent`, because commits that came in with a merge of `<target>` belong to
+colleagues and must never name this branch.
 
 A draft is asked for with `--draft` on `glab mr create`, and the title stays exactly as
 above. `glab` puts `Draft:` in front of the title itself when the flag is passed, so a
