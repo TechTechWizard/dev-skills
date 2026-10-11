@@ -25,7 +25,7 @@ Update later with `npx skills update`, remove with `npx skills remove`.
 | `quick-edit` | "fix", "rename", "tweak" | Makes a small change while the developer watches, following the configured standards, and reports only what the diff does not show. |
 | `implement-task` | "implement the task", "run this task" | Runs a prepared task on its own: standards, code, two rounds of self-review, verification, commits, handover report. |
 | `commit` | "commit" | Makes one commit by the convention. With no details given, it proposes a message and waits. |
-| `review-mr` | "review this MR", a merge-request link | Reviews a merge request against the checklist and posts the findings as comments. Never edits the code. |
+| `review-mr` | "review this MR", a merge-request link | Reads the task the merge request belongs to, reviews the change against that task and the checklist, and posts the findings as comments. Never edits the code. |
 | `create-mr` | "create MR", "open a PR" | Pushes a committed branch and opens a merge request for it. |
 
 `quick-edit` and `implement-task` cover different sizes of work. `quick-edit` is for a
@@ -104,6 +104,8 @@ Only a supported agent is required. Some skills use additional tools:
   ClickUp API token. The skill offers to install the CLI; the token has to be created in
   ClickUp by the user.
 - `create-mr` and `review-mr` need `glab`, authenticated against the GitLab instance.
+- `review-mr` reads the merge request's task through the same `clickup` CLI. Without the
+  CLI or a token, the review still runs and its report says why the task was not checked.
 - `implement-task` uses the built-in `code-review`, `security-review`, `simplify` and `run`
   skills when they are available, and states in the handover which reviewers ran.
 
