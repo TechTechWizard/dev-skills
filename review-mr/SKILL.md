@@ -191,8 +191,9 @@ functionality on a production product sits behind a feature flag.
 ## 5. Two artifacts, never one
 
 The **report** goes to the person who asked for the review: summary, every finding,
-checklist status. The **comments on the merge request** go to its author and are a much
-smaller thing. Never paste the report into GitLab.
+checklist status, or whatever the slot's report document lays out instead. The
+**comments on the merge request** go to its author and are a much smaller thing. Never
+paste the report into GitLab.
 
 How to write and post the comments — the budget, what to cut, and the GitLab API
 recipe for anchoring a comment to a line — is in
@@ -200,6 +201,14 @@ recipe for anchoring a comment to a line — is in
 not after.
 
 ## The report
+
+When the standards slot holds a document about how the result of a review is laid out
+for whoever asked for it, found by the lookup in step 1 with the project's folder first,
+the report follows that document in full and adds none of the sections it leaves out,
+and the template below is only the fallback; whatever the format, the report keeps every
+line the steps above require of it, the line about the task (its link, or why it was
+not read) among them, and the comments on the merge request stay as step 5 describes
+them.
 
 ```
 ## Summary
