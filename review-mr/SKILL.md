@@ -212,9 +212,11 @@ is no such document, and for any subject the document says nothing about. Whatev
 format, the report keeps every line the steps above require of it, the line about the
 task (its link, or why it was not read) among them; a field the document asks for that
 this review has nothing to put in, such as a path to evidence the review never produced,
-is left out rather than invented; and a finding that no section of the document fits
-goes into the section closest to it in meaning rather than being dropped. The comments
-on the merge request stay as step 5 describes them.
+is left out rather than invented, and leaving it out never lowers a finding's class,
+because the quote, the file:line and the command output the review did produce are the
+finding's evidence; and a finding that no section of the document fits goes into the
+section closest to it in meaning rather than being dropped. The comments on the merge
+request stay as step 5 describes them.
 
 ```
 ## Summary
