@@ -106,7 +106,7 @@ git diff <target>...<source-branch>
 
 Review what changed. Code the author did not touch is not in scope, however wrong it
 looks — if it matters, it is a separate task, and the report says so under its own
-heading.
+heading, unless the slot's report document classifies it otherwise (see «The report»).
 
 ## 3. Hunt bugs with the built-in reviewers
 
@@ -204,11 +204,17 @@ not after.
 
 When the standards slot holds a document about how the result of a review is laid out
 for whoever asked for it, found by the lookup in step 1 with the project's folder first,
-the report follows that document in full and adds none of the sections it leaves out,
-and the template below is only the fallback; whatever the format, the report keeps every
-line the steps above require of it, the line about the task (its link, or why it was
-not read) among them, and the comments on the merge request stay as step 5 describes
-them.
+the report follows that document in full and adds none of the sections it leaves out.
+Its rules win as well: what sets the status and what counts as critical, code outside
+the diff that breaks a task scenario included, even where step 2 would put that code out
+of scope. The template below and this skill's own rules are the fallback for when there
+is no such document, and for any subject the document says nothing about. Whatever the
+format, the report keeps every line the steps above require of it, the line about the
+task (its link, or why it was not read) among them; a field the document asks for that
+this review has nothing to put in, such as a path to evidence the review never produced,
+is left out rather than invented; and a finding that no section of the document fits
+goes into the section closest to it in meaning rather than being dropped. The comments
+on the merge request stay as step 5 describes them.
 
 ```
 ## Summary
