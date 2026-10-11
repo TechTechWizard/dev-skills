@@ -1,7 +1,7 @@
 ---
 name: review-mr
-description: "Review somebody else's merge request: read the diff against the team checklist, hunt bugs with the built-in reviewers, and post the findings as comments on the merge request. Trigger on «сделай ревью», «посмотри MR», «проверь мерж реквест», «отревьюй», review this MR, code review — and on any GitLab merge-request URL, even with no other instruction. Read-only on the code: it describes fixes, it never applies them. Reviewing your own fresh work is part of implement-task instead."
-compatibility: "Needs git and `glab` authenticated against your GitLab instance. Uses the built-in code-review and security-review skills where the host has them, and reviews the diff by hand where it does not."
+description: "Review somebody else's merge request: read the task it belongs to, check the diff against that task and the team checklist, hunt bugs with the built-in reviewers, and post the findings as comments on the merge request. Trigger on «сделай ревью», «посмотри MR», «проверь мерж реквест», «отревьюй», review this MR, code review — and on any GitLab merge-request URL, even with no other instruction. Read-only on the code: it describes fixes, it never applies them. Reviewing your own fresh work is part of implement-task instead."
+compatibility: "Needs git and `glab` authenticated against your GitLab instance. Reads the task through the clickup CLI when it is there, and reviews without the task when they are not. Uses the built-in code-review and security-review skills where the host has them, and reviews the diff by hand where it does not."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
@@ -30,13 +30,72 @@ Say in one line which source answered — the document, with its full path when 
 entry is a directory. A review measured against a bar the author cannot see is an
 argument waiting to happen, and a directory name does not show them the bar.
 
-## 2. The diff, and only the diff
+## 2. The task, then the diff
 
 ```sh
 glab mr view <iid> --comments
+```
+
+Read the task the merge request belongs to before reading the diff. Clean code that
+does something other than what the task asked passes every other check in this skill,
+which is why the task is read first.
+
+**Find it in exactly two places, in this order.** First, the task line in the merge
+request description: `Task: https://app.clickup.com/t/<workspace_id>/<TASK_ID>`, or the
+same link without the workspace segment on a `Refs:` line (`Refs:
+https://app.clickup.com/t/<TASK_ID>`). Both forms are in use and read the same way: the
+last path segment is the id. A ClickUp link elsewhere in the text is a related task, not
+this one. Second, the source branch name, `{TASK_ID}-{description}` → the first segment.
+A branch that starts with the author's username (`<username>/...`) has no task, and
+neither does one whose first segment has no digit in it (`fix-typo`, `hotfix-login`):
+that segment is a word, not an id. Not the title, not a search for a similarly named
+task, not a guess from the diff.
+
+**Read it with the `clickup` command**, as the `clickup` skill documents it: `clickup
+task <id> --markdown` for the description as stored, `clickup comments <id>` for the
+comments, nothing more. The comments are not optional: a clarification that narrowed or
+widened the scope usually lives there, and it changes the task — the later word stands.
+Only when the thread itself leaves open which word stands does the finding quote both
+instead of picking one. Write down what the task says is to be done and how it is
+verified — its verification scenarios when it has them — word for word, because the
+findings quote them.
+
+**When the task cannot be read, the review goes on without it.** No link and no id, the
+`clickup` command missing, no token, a token ClickUp rejects, an id it refuses — each is
+one line in the report saying which. When ClickUp refuses the call, read its error for
+which of the two it is; where the error does not say — the same 401 answers a wrong id
+and a workspace the token cannot see — one `clickup my-tasks` tells the token from the
+id, since it works with a good token. The review then continues in full, without the
+task. The `clickup` skill's own answers to these states — its setup protocol, its stop
+to ask for the right id — are for a session about the task, not for a review: do not
+install the CLI, do not walk through its setup, and do not stop to ask for the link. The
+developer reads the line and decides.
+
+Then the diff:
+
+```sh
 git fetch origin <source-branch>
 git diff <target>...<source-branch>
 ```
+
+**Check the diff against what the task asked**, once you have read it. An empty diff is
+reported as empty and stops the review there; there is nothing to hold against the task.
+
+- A scenario the diff does not carry out is a **blocking** finding that quotes the
+  scenario from the task and says what is missing from the change. A scenario that
+  needs a stand to observe is met when the code that implements it is in the diff; the
+  review does not run the stand.
+- Work the diff does that neither the task nor its comments ask for is a
+  **non-blocking** finding: name it, and say that it belongs either in the task or in a
+  task of its own. It may well be a fix the author found on the way, and that decision
+  is the author's, not the review's. A defect inside that extra work is still a finding
+  of its own, wherever its severity puts it.
+- A diff that carries out every scenario gets no finding about the task at all.
+- On the merge request, the unmet scenarios are one blocker under the comment budget:
+  one comment that lists them, each quoted, never a comment per scenario.
+- A task that states nothing checkable — no scenarios, no expected result, a one-line
+  name — is measured against what it does say, and the report line says the task gave
+  nothing more to check against.
 
 Review what changed. Code the author did not touch is not in scope, however wrong it
 looks — if it matters, it is a separate task, and the report says so under its own
@@ -137,14 +196,17 @@ not after.
 ```
 ## Summary
 What the merge request does, and the verdict in one or two sentences.
+Task: the link, checked against it — or one line: the link or id that was found, if
+any, and why it was not read.
 
 ## Findings
 
 ### Blocking
 What must be fixed before this can merge. Each with file:line, what breaks, and when.
+A task scenario the diff does not carry out, quoted from the task.
 
 ### Non-blocking
-Worth changing, does not hold the merge.
+Worth changing, does not hold the merge. Work beyond what the task asked.
 
 ### Out of scope
 Defects this review found outside the diff. Named here, not commented on the merge
@@ -181,6 +243,10 @@ repository's: rerun without the pattern (`ls docker-compose.yml`, `git ls-files
 
 ## Never
 
+- Never invent the task's goal. With no task read, the report says why and the review
+  runs in full without it — the standard, the built-in reviewers, the checklist. A goal
+  reconstructed from the title or the diff measures the change against itself and
+  always passes.
 - Never leave the developer's clone on another branch or commit than the one the
   review started from. The review reads somebody else's branch; it does not move the
   person who asked for it onto that branch.
