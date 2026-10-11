@@ -12,7 +12,7 @@ allowed-tools: Read Grep Glob Bash
 # Create a merge request
 
 Everything said to the developer is in the language they are speaking, from the first
-line to the last: a stop on an uncommitted file, a question about the task or the blocker,
+line to the last: a stop on an uncommitted file, a question about the blocker,
 a refusal, a failed push and the final link all follow the same rule. The stops matter
 most here, because that is when the developer has to decide what goes into a client's
 repository, and a question they have to translate first is the one most easily misread.
@@ -62,14 +62,18 @@ reference, as the title section below describes.
 
 With an id, read the task's name and its link: through the `clickup` skill when it is
 installed, or `clickup task <TASK_ID>`, whose output carries both. The link is the one
-ClickUp gives for the task. When ClickUp cannot be reached — no CLI, no token — the link
-is built from the id: `https://app.clickup.com/t/{TASK_ID}` for a ClickUp id, and for a
-custom id `https://app.clickup.com/t/<workspace_id>/{TASK_ID}`, with the workspace number
-taken from the project's `CLAUDE.md`. Two cases stop the run with a question instead,
-because the link they would produce opens nothing: ClickUp answers that it does not know
-the id, which is usually a typo in the branch name, and a custom id with no workspace
-number anywhere. A run with nobody to answer ends there, with the reason and no merge
-request: a guessed link would reach the customer, and a dropped one would hide the task.
+ClickUp gives for the task.
+
+When the task cannot be read — no CLI, no token, or ClickUp answers that it does not know
+the id — nothing is asked either. The title is worded from the diff, as the title section
+describes, and the link is built from the id: `https://app.clickup.com/t/{TASK_ID}` for a
+ClickUp id, and for a custom id `https://app.clickup.com/t/<workspace_id>/{TASK_ID}`, with
+the workspace number taken from the project's `CLAUDE.md`. A custom id with no workspace
+number anywhere gets no link and no `Task:` line, because a link without that number
+opens nothing. Each of these leaves one line in the final message saying why: an id
+ClickUp did not recognise is usually a typo in the branch name, so that line asks the
+developer to check it; a missing workspace number is named as the reason the `Task:`
+line is absent.
 
 ## Branched from another unmerged branch
 
@@ -127,10 +131,10 @@ Task: <task link>
 Blocker: !<iid>
 ```
 
-`<task link>` is the link the task reference section produced. Without a task id there
-is no `Task:` line, and the description is the `Blocker:` line alone or empty. No
-summary, no test plan, no checklist, no list of files. The reviewer reads the diff and
-the task; the description points at them.
+`<task link>` is the link the task reference section produced. Without a task id, or
+without a link for it, there is no `Task:` line, and the description is the `Blocker:`
+line alone or empty. No summary, no test plan, no checklist, no list of files. The
+reviewer reads the diff and the task; the description points at them.
 
 Nothing else is appended — no "Generated with" line, no co-author trailer, no emoji.
 Some hosts tell the session by default to end every pull request description with such
@@ -167,8 +171,9 @@ title unchanged. A branch with a blocker still targets `<target>`, never the blo
 branch: the `Blocker:` line is what orders the review, and a merge request into the
 blocker's branch would be merged into it rather than into `<target>`.
 
-Then print the link, the title, the target branch and the blocker when there is one, in
-the developer's language like everything else this skill says to them.
+Then print the link, the title, the target branch, the blocker when there is one and the
+line about an unread task when there is one, in the developer's language like everything
+else this skill says to them.
 
 ## Never
 
