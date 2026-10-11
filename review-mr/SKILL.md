@@ -34,7 +34,12 @@ argument waiting to happen, and a directory name does not show them the bar.
 
 ```sh
 glab mr view <iid> --comments
+git fetch origin <source-branch>
+git diff --stat <target>...<source-branch>
 ```
+
+An empty diff is reported as empty and stops the review there, before the task is
+looked up: there is nothing to hold against it.
 
 Read the task the merge request belongs to before reading the diff. Clean code that
 does something other than what the task asked passes every other check in this skill,
@@ -74,12 +79,10 @@ developer reads the line and decides.
 Then the diff:
 
 ```sh
-git fetch origin <source-branch>
 git diff <target>...<source-branch>
 ```
 
-**Check the diff against what the task asked**, once you have read it. An empty diff is
-reported as empty and stops the review there; there is nothing to hold against the task.
+**Check the diff against what the task asked**, once you have read it:
 
 - A scenario the diff does not carry out is a **blocking** finding that quotes the
   scenario from the task and says what is missing from the change. A scenario that
