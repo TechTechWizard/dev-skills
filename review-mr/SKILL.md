@@ -45,16 +45,19 @@ Read the task the merge request belongs to before reading the diff. Clean code t
 does something other than what the task asked passes every other check in this skill,
 which is why the task is read first.
 
-**Find it in exactly two places, in this order.** First, the task line in the merge
-request description: `Task: https://app.clickup.com/t/<workspace_id>/<TASK_ID>`, or the
-same link without the workspace segment on a `Refs:` line (`Refs:
-https://app.clickup.com/t/<TASK_ID>`). Both forms are in use and read the same way: the
-last path segment is the id. A ClickUp link elsewhere in the text is a related task, not
-this one. Second, the source branch name, `{TASK_ID}-{description}` → the first segment.
-A branch that starts with the author's username (`<username>/...`) has no task, and
-neither does one whose first segment has no digit in it (`fix-typo`, `hotfix-login`):
-that segment is a word, not an id. Not the title, not a search for a similarly named
-task, not a guess from the diff.
+**Find it in exactly two places, in this order.** First, the `Task:` line in the merge
+request description, as `create-mr` writes it: `Task: https://app.clickup.com/t/<TASK_ID>`
+for a ClickUp id, `Task: https://app.clickup.com/t/<workspace_id>/<TASK_ID>` for a custom
+id. A merge request opened before that format carries the link on a `Refs:` line
+instead, and it reads the same way. In every form the last path segment is the id. A
+ClickUp link elsewhere in the text is a related task, not this one. Second, the source
+branch name, `{TASK_ID}-{description}`, read by the same rule `create-mr` uses. A custom
+id such as `ABC-123` carries a hyphen of its own and is taken whole: capital letters, a
+hyphen, digits. Otherwise the id is the first segment when that segment is a ClickUp id
+— at least seven lowercase letters and digits, starting with a digit and with letters
+among them. A branch like `cleanup-logging`, `oauth2-login` or `<username>/cleanup-logging`
+has no task. Not the title, not a search for a similarly named task, not a guess from
+the diff.
 
 **Read it with the `clickup` command**, as the `clickup` skill documents it: `clickup
 task <id>` for the card with the task's name, `clickup task <id> --markdown` for the
