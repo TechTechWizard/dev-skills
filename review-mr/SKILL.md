@@ -1,7 +1,7 @@
 ---
 name: review-mr
 description: "Review somebody else's merge request: read the task it belongs to, check the diff against that task and the team checklist, hunt bugs with the built-in reviewers, and post the findings as comments on the merge request. Trigger on «сделай ревью», «посмотри MR», «проверь мерж реквест», «отревьюй», review this MR, code review — and on any GitLab merge-request URL, even with no other instruction. Read-only on the code: it describes fixes, it never applies them. Reviewing your own fresh work is part of implement-task instead."
-compatibility: "Needs git and `glab` authenticated against your GitLab instance. Reads the task through the clickup CLI when it is there, and reviews without the task when they are not. Uses the built-in code-review and security-review skills where the host has them, and reviews the diff by hand where it does not."
+compatibility: "Needs git and `glab` authenticated against your GitLab instance. Reads a ClickUp task through the clickup CLI when it is there and a GitLab issue through the same glab, and reviews without the task when neither can be read. Uses the built-in code-review and security-review skills where the host has them, and reviews the diff by hand where it does not."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
   update: "npx skills update"
@@ -45,28 +45,49 @@ Read the task the merge request belongs to before reading the diff. Clean code t
 does something other than what the task asked passes every other check in this skill,
 which is why the task is read first.
 
-**Find it in exactly two places, in this order.** First, the `Task:` line in the merge
-request description, as `create-mr` writes it: `Task: https://app.clickup.com/t/<TASK_ID>`
-for a ClickUp id, `Task: https://app.clickup.com/t/<workspace_id>/<TASK_ID>` for a custom
-id. A merge request opened before that format carries the link on a `Refs:` line
-instead, and it reads the same way. In every form the last path segment is the id. A
-ClickUp link elsewhere in the text is a related task, not this one. Second, the source
-branch name, `{TASK_ID}-{description}`, read by the same rule `create-mr` uses. A custom
-id such as `ABC-123` carries a hyphen of its own and is taken whole: capital letters, a
-hyphen, digits. Otherwise the id is the first segment when that segment is a ClickUp id
-— at least seven lowercase letters and digits, starting with a digit and with letters
-among them. A branch like `cleanup-logging`, `oauth2-login` or `<username>/cleanup-logging`
-has no task. Not the title, not a search for a similarly named task, not a guess from
-the diff.
+**Find it in exactly two places, in this order.** First, the merge request description,
+where `create-mr` writes one line about the task. For a ClickUp task it is the `Task:`
+line: `Task: https://app.clickup.com/t/<TASK_ID>` for a ClickUp id, `Task:
+https://app.clickup.com/t/<workspace_id>/<TASK_ID>` for a custom id. A merge request
+opened before that format carries the link on a `Refs:` line instead, and it reads the
+same way. In every form the last path segment is the id. For a GitLab issue it is the
+closing line: `Closes #<iid>` names an issue of the project the merge request is in, and
+`Closes <group>/<project>#<iid>` names one in another project, by that project's full
+path. GitLab accepts `Fixes` and `Resolves` in place of `Closes`, and so does this step,
+because a line written by hand closes the issue just the same. A ClickUp link or an issue
+reference elsewhere in the text is a related task, not this one. Second, the source
+branch name, `{TASK_ID}-{description}`, read by the same rule `create-mr` uses, in the
+same order. A custom id such as `ABC-123` carries a hyphen of its own and is taken whole:
+capital letters, a hyphen, digits. Otherwise the id is the first segment when that
+segment is a ClickUp id — at least seven lowercase letters and digits, starting with a
+digit and with letters among them. Otherwise the first segment is the iid of a GitLab
+issue when it is digits and nothing else and the segment after it is not digits alone,
+which keeps `2026-10-16-cleanup` from reading as issue 2026; `1.2.0-hotfix` is not digits
+at all. An issue number from the branch belongs to the project the merge request is in,
+unless the project's `CLAUDE.md` carries the line `Issues: <group>/<project>` that
+`create-mr` reads, and then to that project. A branch like `cleanup-logging`,
+`oauth2-login` or `<username>/cleanup-logging` has no task. Not the title, not a search
+for a similarly named task, not a guess from the diff.
 
-**Read it with the `clickup` command**, as the `clickup` skill documents it: `clickup
-task <id>` for the card with the task's name, `clickup task <id> --markdown` for the
-description as stored, `clickup comments <id>` for the comments, nothing more. The comments are not optional: a clarification that narrowed or
+**Read a ClickUp task with the `clickup` command**, as the `clickup` skill documents it:
+`clickup task <id>` for the card with the task's name, `clickup task <id> --markdown` for
+the description as stored, `clickup comments <id>` for the comments, nothing more. The comments are not optional: a clarification that narrowed or
 widened the scope usually lives there, and it changes the task — the later word stands.
 Only when the thread itself leaves open which word stands does the finding quote both
 instead of picking one. Write down what the task says is to be done and how it is
 verified — its verification scenarios when it has them — word for word, because the
 findings quote them.
+
+**Read a GitLab issue with `glab`**, from this clone, which already points at the project
+the merge request is in: `glab issue view <iid> --comments` for the issue and its comments
+together, with `-R <group>/<project>` added when the reference carries a project path,
+and `glab issue view <iid> -F json` when a quote has to match the stored text, because
+`description` there is the markdown as written and `--comments` adds the comments to it
+as `Notes`. The comments count for the same reason as in ClickUp, and the later word
+stands there too. The scenarios of an issue are usually its checkboxes — `- [ ]` lines
+under a heading about acceptance, as issue templates write them — and every checkbox line
+is a scenario, ticked or not: a tick is something somebody did on the issue, not evidence
+about this diff.
 
 **When the task cannot be read, the review goes on without it.** No link and no id, the
 `clickup` command missing, no token, a token ClickUp rejects, an id it refuses — each is
@@ -77,7 +98,14 @@ id, since it works with a good token. The review then continues in full, without
 task. The `clickup` skill's own answers to these states — its setup protocol, its stop
 to ask for the right id — are for a session about the task, not for a review: do not
 install the CLI, do not walk through its setup, and do not stop to ask for the link. The
-developer reads the line and decides.
+developer reads the line and decides. For a GitLab issue the one answer `glab` gives is
+`404 Not Found`, and the line says what that leaves open. With a bare number it means the
+project the merge request is in has no issue with that number, and the line names the
+project and says that when the issue lives in another project of the group, the
+description is where to say so, as `Closes <group>/<project>#<iid>`. With a full
+reference it means the path or the number is wrong, or the token cannot see that project.
+The review does not look through the group's other projects for the number, because every
+project that has reached it has an issue with it, and none of them is thereby the task.
 
 Then the diff:
 
@@ -221,8 +249,8 @@ request stay as step 5 describes them.
 ```
 ## Summary
 What the merge request does, and the verdict in one or two sentences.
-Task: the link, checked against it — or one line: the link or id that was found, if
-any, and why it was not read.
+Task: the link, checked against it — the issue's own address for a GitLab issue — or
+one line: the link or id that was found, if any, and why it was not read.
 
 ## Findings
 

@@ -104,8 +104,9 @@ Only a supported agent is required. Some skills use additional tools:
   ClickUp API token. The skill offers to install the CLI; the token has to be created in
   ClickUp by the user.
 - `create-mr` and `review-mr` need `glab`, authenticated against the GitLab instance.
-- `review-mr` reads the merge request's task through the same `clickup` CLI. Without the
-  CLI or a token, the review still runs and its report says why the task was not checked.
+- `create-mr` and `review-mr` read a ClickUp task through the same `clickup` CLI, and a
+  GitLab issue through `glab`. Without the CLI or a token, the review still runs and its
+  report says why the task was not checked.
 - `implement-task` uses the built-in `code-review`, `security-review`, `simplify` and `run`
   skills when they are available, and states in the handover which reviewers ran.
 
