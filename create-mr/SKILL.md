@@ -91,23 +91,22 @@ the id — nothing is asked either. The title is worded from the diff, as the ti
 describes, and the link is built from the id: `https://app.clickup.com/t/{TASK_ID}` for a
 ClickUp id, and for a custom id `https://app.clickup.com/t/<workspace_id>/{TASK_ID}`, with
 the workspace number taken from the project's `CLAUDE.md`. A custom id with no workspace
-number anywhere gets no link and no `Task:` line, because a link without that number
+number anywhere gets no link and no `Refs:` line, because a link without that number
 opens nothing. Each of these leaves one line in the final message saying why. ClickUp
 answers an unknown id and a task in a workspace the token cannot see with the same 401,
 so the line for a refused id names both causes — a typo in the branch name, or a task
 outside the token's workspaces — and asks the developer to check which; a missing
-workspace number is named as the reason the `Task:` line is absent.
+workspace number is named as the reason the `Refs:` line is absent.
 
 An issue `glab` cannot read answers `404 Not Found`, and that answer names no cause: the
 number has no issue in the project asked, or, with `-R`, the path on the `Issues:` line
 is wrong or the token cannot see that project. The title is worded from the diff as for
-an unread ClickUp task, and the description carries no `Closes` line, because a closing
-reference to an issue that is not there closes nothing today and, once the issue turns
-out to live in another project, points at whatever issue of this project gets that
-number next. The final message says in one line that issue `#<iid>` was not found in the
-project asked, names that project, and says that when the issue lives in another project
-of the group, the line `Issues: <group>/<project>` in `CLAUDE.md` is what tells this
-skill where to look.
+an unread ClickUp task, and the description carries no `Refs:` line, because a link
+built from a number that was not found would point at whatever issue of that project
+gets the number next. The final message says in one line that issue `#<iid>` was not
+found in the project asked, names that project, and says that when the issue lives in
+another project of the group, the line `Issues: <group>/<project>` in `CLAUDE.md` is what
+tells this skill where to look.
 
 ## Branched from another unmerged branch
 
@@ -171,21 +170,20 @@ empty when there is neither a task id nor a blocker — however many commits and
 branch has.
 
 ```
-Task: <task link>
+Refs: <task link>
 Blocker: !<iid>
 ```
 
-`<task link>` is the link the task reference section produced. For a GitLab issue the
-first line is not a link but GitLab's own closing reference, `Closes #<iid>` when the
-issue is in the project the merge request is opened in, and `Closes
-<group>/<project>#<iid>` when the `Issues:` line put it in another project, with the path
-exactly as that line gives it. GitLab reads the word and closes the issue when the merge
-request is merged, which is why the issue is named this way rather than by its address,
-and a reference without the project path can only close an issue of the project the merge
-request is in. Without a task id, or without a link or a readable issue for it, there is
-no `Task:` or `Closes` line, and the description is the `Blocker:` line alone or empty. No
-summary, no test plan, no checklist, no list of files. The reviewer reads the diff and the
-task; the description points at them.
+`<task link>` is the link the task reference section produced: the link ClickUp gives
+for a ClickUp task, and for a GitLab issue the issue's own address, `web_url` from
+`glab issue view`, which carries the project path and so names the project the issue
+lives in. The description never carries GitLab's closing keywords (`Closes`, `Fixes`,
+`Resolves`) in front of an issue: GitLab would close the issue when the merge request is
+merged, and the issue is closed by hand after the acceptance check, not by the merge.
+Without a task id, or without a link or a readable issue for it, there is no `Refs:`
+line, and the description is the `Blocker:` line alone or empty. No summary, no test
+plan, no checklist, no list of files. The reviewer reads the diff and the task; the
+description points at them.
 
 Nothing else is appended — no "Generated with" line, no co-author trailer, no emoji.
 Some hosts tell the session by default to end every pull request description with such
