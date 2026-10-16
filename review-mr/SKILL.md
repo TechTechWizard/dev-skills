@@ -46,15 +46,14 @@ does something other than what the task asked passes every other check in this s
 which is why the task is read first.
 
 **Find it in exactly two places, in this order.** First, the merge request description,
-where `create-mr` writes one line about the task. For a ClickUp task it is the `Task:`
-line: `Task: https://app.clickup.com/t/<TASK_ID>` for a ClickUp id, `Task:
+where `create-mr` writes one line about the task. For a ClickUp task it is the `Refs:`
+line: `Refs: https://app.clickup.com/t/<TASK_ID>` for a ClickUp id, `Refs:
 https://app.clickup.com/t/<workspace_id>/<TASK_ID>` for a custom id. A merge request
-opened before that format carries the link on a `Refs:` line instead, and it reads the
-same way. In every form the last path segment is the id. For a GitLab issue it is the
-closing line: `Closes #<iid>` names an issue of the project the merge request is in, and
-`Closes <group>/<project>#<iid>` names one in another project, by that project's full
-path. GitLab accepts `Fixes` and `Resolves` in place of `Closes`, and so does this step,
-because a line written by hand closes the issue just the same. A ClickUp link or an issue
+opened while the format was `Task:` carries the link on a `Task:` line instead, and it
+reads the same way. In every form the last path segment is the id. For a GitLab issue it
+is the same `Refs:` line with the issue's own address,
+`https://<host>/<group>/<project>/-/issues/<iid>`: the path in the address names the
+project the issue lives in, and the last segment is the iid. A ClickUp link or an issue
 reference elsewhere in the text is a related task, not this one. Second, the source
 branch name, `{TASK_ID}-{description}`, read by the same rule `create-mr` uses, in the
 same order. A custom id such as `ABC-123` carries a hyphen of its own and is taken whole:
@@ -102,7 +101,7 @@ developer reads the line and decides. For a GitLab issue the one answer `glab` g
 `404 Not Found`, and the line says what that leaves open. With a bare number it means the
 project the merge request is in has no issue with that number, and the line names the
 project and says that when the issue lives in another project of the group, the
-description is where to say so, as `Closes <group>/<project>#<iid>`. With a full
+description is where to say so, as a `Refs:` line with the issue's address. With a full
 reference it means the path or the number is wrong, or the token cannot see that project.
 The review does not look through the group's other projects for the number, because every
 project that has reached it has an issue with it, and none of them is thereby the task.
