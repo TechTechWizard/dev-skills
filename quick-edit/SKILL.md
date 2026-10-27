@@ -4,7 +4,7 @@ description: "A small change the developer is watching: fix a bug in this file, 
 compatibility: "Needs git. Written for Claude Code; the standards lookup reads ~/.agents/standards/."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
-  update: "npx skills update"
+  update: "npx skills update -g"
   standard: "https://agentskills.io/specification"
 allowed-tools: Read Write Edit Grep Glob Bash
 ---

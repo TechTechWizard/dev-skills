@@ -15,7 +15,7 @@ npx skills add TechTechWizard/dev-skills -g -a claude-code -s '*'
 be asked, `'*'` for every agent on the machine); `-s '*'` takes all six, or name the ones
 you want.
 
-Update later with `npx skills update`, remove with `npx skills remove`.
+Update later with `npx skills update -g`, remove with `npx skills remove -g`.
 
 ## Skills
 

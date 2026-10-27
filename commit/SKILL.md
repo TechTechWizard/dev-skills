@@ -4,7 +4,7 @@ description: "Commit what is in the working tree, by the team convention: type a
 compatibility: "Needs git. Written for Claude Code; the standards lookup reads ~/.agents/standards/."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
-  update: "npx skills update"
+  update: "npx skills update -g"
   standard: "https://agentskills.io/specification"
 allowed-tools: Read Grep Glob Bash
 ---

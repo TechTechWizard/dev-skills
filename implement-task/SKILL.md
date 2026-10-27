@@ -4,7 +4,7 @@ description: "Take a prepared task and run it to 'ready for human review' on you
 compatibility: "Needs git. Written for Claude Code: it invokes the built-in code-review, security-review, simplify and run skills through the Skill tool and starts one subagent per standard document through the Agent tool, and degrades with a note in the handover when they are absent."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
-  update: "npx skills update"
+  update: "npx skills update -g"
   standard: "https://agentskills.io/specification"
 ---
 

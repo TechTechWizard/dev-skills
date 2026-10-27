@@ -4,7 +4,7 @@ description: "Review somebody else's merge request: read the task it belongs to,
 compatibility: "Needs git and `glab` authenticated against your GitLab instance. Reads a ClickUp task through the clickup CLI when it is there and a GitLab issue through the same glab, and reviews without the task when neither can be read. Uses the built-in code-review and security-review skills and one subagent per standard document where the host has them, and does that work by hand where it does not."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
-  update: "npx skills update"
+  update: "npx skills update -g"
   standard: "https://agentskills.io/specification"
 allowed-tools: Read Grep Glob Bash Skill Agent
 ---

@@ -4,7 +4,7 @@ description: "Turn a committed branch into a merge request in GitLab through the
 compatibility: "Needs git and `glab` authenticated against your GitLab instance. Reads a ClickUp task through the clickup CLI when the branch names one, and a GitLab issue through the same glab."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
-  update: "npx skills update"
+  update: "npx skills update -g"
   standard: "https://agentskills.io/specification"
 allowed-tools: Read Grep Glob Bash
 ---

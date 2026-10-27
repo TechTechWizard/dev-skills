@@ -4,7 +4,7 @@ description: "Reads and writes ClickUp tasks through the clickup CLI: prepares a
 compatibility: "Needs the `clickup` CLI from the claude-work-tools repository and a personal ClickUp API token; the skill offers to install the CLI on first use."
 metadata:
   source: "https://github.com/TechTechWizard/dev-skills"
-  update: "npx skills update"
+  update: "npx skills update -g"
   standard: "https://agentskills.io/specification"
 allowed-tools: Read Write Grep Glob Bash
 ---
